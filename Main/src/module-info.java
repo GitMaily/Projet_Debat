@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author tangu
+ *
+ */
+module Main {
+}
