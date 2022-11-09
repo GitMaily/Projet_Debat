@@ -26,10 +26,10 @@ public class Main {
 			switch(choix) {
 			case 1: 
 				System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
-				String nomArg1 = sc.next();
+				String nomArg1 = sc.next().toUpperCase();
 				
 				System.out.println("Veuillez saisir le nom de l'argument contredit.");
-				String nomArg2 = sc.next();
+				String nomArg2 = sc.next().toUpperCase();
 
 				graphe.ajouterContradiction(nomArg1, nomArg2);
 				graphe.afficherGrapheAvecContradictions();
@@ -72,7 +72,7 @@ public class Main {
 			//boolean duplicate = false;
 			switch(choix) {
 			case 1: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez ajouter dans la solution");
-					String argSol = sc.next();
+					String argSol = sc.next().toUpperCase();
 					E.ajouterArgumentSolution(argSol);
 					/*if(duplicate == false) {
 						System.out.println("Cet argument se trouve déjà dans la solution E. La solution E n'est donc pas modifiée.");
@@ -81,7 +81,7 @@ public class Main {
 					break;
 			
 			case 2: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez retirer de la solution");
-					String argRetirer = sc.next();
+					String argRetirer = sc.next().toUpperCase();
 					E.retirerArgumentSolution(argRetirer);
 					E.afficherSolution();
 					break;
