@@ -1,22 +1,13 @@
-package up.mi.tsm;
+package up.mi.ttsmmc;
 
 import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String []args) {
-		//1) ajouter un argument;
-		//2) retirer un argument;
-		//3) vérifier la solution;
-		//4) fin
-		
-		//1 : String nomArgument = Scanner.nextLine();
-		//ArgumentNoeud arg = new ArgumentNoeud(nomArgument);
 		
 		/*
-		 * Questions : Gestion des erreur avec des print, ou des exceptions ?
 		 * Est-ce grave si l'ordre du graphMap est inversé?
-		 * 
 		 */
 		
 		
@@ -34,10 +25,10 @@ public class Main {
 			
 			switch(choix) {
 			case 1: 
-				System.out.println("Veuillez saisir l'argument contradicteur.");
+				System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
 				String nomArg1 = sc.next();
 				
-				System.out.println("Veuillez saisir l'argument contredit.");
+				System.out.println("Veuillez saisir le nom de l'argument contredit.");
 				String nomArg2 = sc.next();
 
 				graphe.ajouterContradiction(nomArg1, nomArg2);
@@ -48,14 +39,13 @@ public class Main {
 			case 2:
 				System.out.println("Vous avez terminé de représenter le graphe.");
 				System.out.println("Vous allez à présent proposer une solution au problème. On appelera l'ensemble E la solution.");
-				
 				break;
 			}
 			
 			
 			
 		}while((choix== 1 && choix !=2));
-		menuSolutions(sc);
+		menuSolutions(sc, graphe);
 		
 		//String nomArgument = sc.nextLine();
 		//ArgumentNoeud arg = new ArgumentNoeud(nomArgument);
@@ -65,11 +55,12 @@ public class Main {
 		
 	}
 	
-	public static void menuSolutions(Scanner sc) {
-		SolutionSimple E = new SolutionSimple();
+	public static void menuSolutions(Scanner sc, ListeAdjacence graphe) {
+		SolutionSimple E = new SolutionSimple(graphe);
 		int choix;
 
 		do {
+			System.out.println();
 			System.out.println("(1) Ajouter un argument;");
 			System.out.println("(2) Retirer un argument;");
 			System.out.println("(3) Vérifier la solution;");
@@ -77,19 +68,34 @@ public class Main {
 			choix  = sc.nextInt();
 
 
-			
+			boolean estAdmissible = false;
+			//boolean duplicate = false;
 			switch(choix) {
 			case 1: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez ajouter dans la solution");
 					String argSol = sc.next();
 					E.ajouterArgumentSolution(argSol);
+					/*if(duplicate == false) {
+						System.out.println("Cet argument se trouve déjà dans la solution E. La solution E n'est donc pas modifiée.");
+					}*/
+					E.afficherSolution();
 					break;
 			
 			case 2: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez retirer de la solution");
 					String argRetirer = sc.next();
 					E.retirerArgumentSolution(argRetirer);
+					E.afficherSolution();
 					break;
 					
 			case 3: System.out.println("Vérification de la solution");
+					estAdmissible = E.solutionAdmissible();
+					if(estAdmissible) {
+						System.out.println("La solution est donc admissible.");
+					}
+					else {
+						System.out.println("La solution n'est donc pas admissible.");
+					}
+					E.afficherSolution();
+
 					/*
 					 * A FAIRE
 					 */
@@ -101,6 +107,8 @@ public class Main {
 					 */
 					break;
 
+			default: System.out.println("Ce n'est pas un choix valide, veuillez réessayer.");
+					break;
 			
 
 			}

@@ -1,4 +1,4 @@
-package up.mi.tsm;
+package up.mi.ttsmmc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,23 +42,6 @@ public class ListeAdjacence {
 		this.graphMap = graphMap;
 	}
 	
-
-	/**
-	 * Ajoute un contre argument dans le graph (le HashMap)
-	 * @param noeud L'argument à ajouter
-	 * @param arc Le noeud à contredire
-	 */
-	public void ajouterCounterArgument(ArgumentNoeud noeud, ArgumentNoeud arc) {
-		ArrayList<ArgumentNoeud> listeArcs;
-		if(graphMap.containsKey(noeud)) {
-			listeArcs = graphMap.get(noeud);
-		}
-		else {
-			listeArcs = new ArrayList<ArgumentNoeud>();
-		}
-		
-		listeArcs.add(arc);
-	}
 	
 	/**
 	 * Ajoute un argument dans le graphe
@@ -68,6 +51,8 @@ public class ListeAdjacence {
 	/*public void ajouterArgument(ArgumentNoeud noeud) {
 		
 	}*/
+	
+	
 	
 	/**
 	 * Retire un argument dans le graphe
@@ -92,14 +77,16 @@ public class ListeAdjacence {
 	 * @param nomArg2 Le nom de l'argument contredit (cible)
 	 */
 	public void ajouterContradiction(String nomArg1, String nomArg2) {
-		ArgumentNoeud argContradicteur = null;
 		
+		// On cherche l'argument contradicteur
+		ArgumentNoeud argContradicteur = null;
 		for(ArgumentNoeud solu : graphMap.keySet()) {
 			if(solu.getNomArgument().equals(nomArg1)) {
 				argContradicteur = solu;
 			}
 		}
 		
+		// On cherche l'argument cible
 		ArgumentNoeud argCible = null;
 		for(ArgumentNoeud solu : graphMap.keySet()) {
 			if(solu.getNomArgument().equals(nomArg2)) {
@@ -107,6 +94,7 @@ public class ListeAdjacence {
 			}
 		}
 		
+		// On ajoute le nouvel argument dans la liste des arguments contredits de l'argument contradicteur.
 		ArrayList<ArgumentNoeud> listeArcs;
 		if(graphMap.containsKey(argContradicteur)) {
 			listeArcs = graphMap.get(argContradicteur);
@@ -120,6 +108,9 @@ public class ListeAdjacence {
 		
 	}
 	
+	/**
+	 * Affichage du graphe simple sans les contradictions
+	 */
 	public void afficherGraphe() {
 		System.out.println("Affichage du graphe :");
 		for(ArgumentNoeud noeud : graphMap.keySet()) {
@@ -128,6 +119,10 @@ public class ListeAdjacence {
 		System.out.println();
 	}
 	
+	
+	/**
+	 * Affichage du graphe avec les contradictions
+	 */
 	public void afficherGrapheAvecContradictions() {
 		System.out.println("Affichage du graphe avec les contradictions :");
 		for(ArgumentNoeud noeud : graphMap.keySet()) {
