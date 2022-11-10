@@ -10,23 +10,25 @@ import java.util.Set;
 
 /**
  * Représente l'ensemble E des solutions simple 
- * (l'utilisateur peut essayer de trouver une solution au problème)
- * @author Thomas
- * @author Samuel
- * @author Maily
+ * (l'utilisateur va essayer de trouver une solution au problème)
+ * @author Thomas Tanguy
+ * @author Samuel Lavallée
+ * @author Maily Ciavaldini
+ * @version PHASE_1
  */
 public class SolutionSimple {
 
 	private ListeAdjacence graphe;
 	private List<ArgumentNoeud> listeSolutions;
 	
+	/**
+	 * Constructeur qui crée un arrayList vide pour entrer des arguments dans la solution E
+	 * @param graphe Le graphe crée au préalable
+	 */
 	public SolutionSimple(ListeAdjacence graphe) {
 		this.graphe = graphe;
 		listeSolutions = new ArrayList<ArgumentNoeud>();
 	}
-	
-	
-	
 	
 	/**
 	 * Ajoute un argument dans la solution potentielle E après avoir vérifié qu'il n'est pas déjà présent
@@ -70,7 +72,7 @@ public class SolutionSimple {
 	}
 	
 	/**
-	 * Retire un argument de E après avoir vérifié son existance.
+	 * Retire un argument de E après avoir vérifié son existence.
 	 * @param nomArg L'argument à retirer de E
 	 * @return false si l'argument n'existe pas, true sinon
 	 */
@@ -109,13 +111,15 @@ public class SolutionSimple {
 	 * - pour tout argument a qui contredit un élément de E, il existe un élément de E qui contredit a. (E se défend contre a)
 	 */
 	public boolean solutionAdmissible() {
-		// Cas ensemble vide, toujours admissible
+		/* Cas ensemble vide, toujours admissible */
 		if(listeSolutions.size() == 0) {
-			System.out.println("La solution E est vide, donc elle est admissible.");
+			System.out.println("La solution E est vide.");
 			return true;
 		}
 		
-		// Cas contradiction interne
+		
+		/* Cas contradiction interne */
+		
 		for(ArgumentNoeud arg : listeSolutions) {
 			for(int i = 0;i<listeSolutions.size();i++) {
 				// Vérifie si il existe un arc entre chaque argument dans la solution
@@ -131,78 +135,82 @@ public class SolutionSimple {
 			}
 		}
 		
-		ArrayList<ArgumentNoeud> listeCibles = new ArrayList<ArgumentNoeud>();
-		// Cas argument non défendu dans la solution
-		// On identifie un argument dans l’ensemble qui n’est pas défendu contre tous ses contradicteurs
-		/*for(int i = 0;i<listeSolutions.size();i++) {
-			if(graphe.getGraphMap().containsValue(listeSolutions)) {
-				
-				
-				
-			}
-		}*/
+		/* Cas argument non défendu dans la solution */
+		
+		int personne = 0; // Va servir a compter le nombre d'arguments dans la solution qui ne sont contredits par personne
 		boolean estAdmissible = false;
 		boolean defended = false;
-		// Identifier qui contredit A1
-		for(int i = 0;i<listeSolutions.size();i++) { // i= 0 : A1
-			//for(int j = 0;j<listeSolutions.size();j++) {
-				for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
-					for(ArgumentNoeud cible : graphe.getGraphMap().get(noeud)) {
-						if(cible.equals(listeSolutions.get(i))) {
-							listeCibles.add(noeud); // liste de qui contredit A1
-						}
+		ArrayList<ArgumentNoeud> listeCibles = new ArrayList<ArgumentNoeud>();
+		
+		// On identifie un argument dans l’ensemble qui n’est pas défendu contre tous ses contradicteurs
+		// NB : L'_argument courant_ correspond à l'argument qu'on itère dans la liste des solutions, donc i.
+		for(int i = 0;i<listeSolutions.size();i++) { 
+			
+			// On identifie qui est-ce qui contredit l'argument courant de la solution E, en les mettant dans une liste
+			for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
+				for(ArgumentNoeud cible : graphe.getGraphMap().get(noeud)) {
+					if(cible.equals(listeSolutions.get(i))) {
+						listeCibles.add(noeud); // liste des arguments qui contredisent l'argument courant
 					}
 				}
-				
-				// Identifier si l'un des arguments de la solution E défend A1
-				//int count = 0;
-				for(ArgumentNoeud arg : listeCibles) {
-					for(int j = 0;j<listeSolutions.size();j++) {
+			}
+			
+		
+			
+			// Affichage de la liste des arguments qui attaquent (contredisent) l'argument courant de la solution E
+			StringBuilder bb = new StringBuilder();
+			if(listeCibles.size() != 0) {
+				for(int cibles = 0; cibles < listeCibles.size();cibles++) {
+					bb.append(listeCibles.get(cibles).getNomArgument().toString());
+					if(cibles != listeCibles.size()-1) {
+						bb.append(", ");
+					}
+				}
+				System.out.println(listeSolutions.get(i).getNomArgument()+" est attaqué par les arguments "+bb.toString());
+			}
+			else {
+				personne++;
+			}
+			
+			// On identifie si l'un des arguments de la solution E défend l'argument courant de la solution E
+			for(ArgumentNoeud arg : listeCibles) {
+				for(int j = 0;j<listeSolutions.size();j++) {
+					//System.out.println("Identification si le contradicteur "+arg.getNomArgument()+" est contredit par "+listeSolutions.get(j).getNomArgument());
 
-						// Vérifie si la cible est contenue dans les values d'un des arguments de E
-						if(graphe.getGraphMap().get(listeSolutions.get(j)).contains(arg)) {
-							defended = true;
-							System.out.println("L'argument "+listeSolutions.get(j).getNomArgument()+" contredit l'argument "+arg.getNomArgument());
-							
-							//count++;
-							j = listeSolutions.size();
-							//return true;
-						}
+					// Vérifie si la cible courante se trouve dans les arguments contredits par l'argument de la solution E
+					if(graphe.getGraphMap().get(listeSolutions.get(j)).contains(arg)) {
+						defended = true;
+						System.out.println("Défense de "+listeSolutions.get(i).getNomArgument()+" : l'argument "+listeSolutions.get(j).getNomArgument()+" contredit l'argument "+arg.getNomArgument());
 						
-						if(j == listeSolutions.size()-1 && defended == false) {
-							System.out.println("Aucune défense pour le contradicteur "+arg.getNomArgument());
-							
-							return false;
-						}
+						j = listeSolutions.size(); // On sort de la boucle
+					}
+					
+					// On vérifie si on n'a effectivement pas trouvé de défendeur
+					if(j == listeSolutions.size()-1 && defended == false) {
+						System.out.println("Aucune défense pour le contradicteur "+arg.getNomArgument());
+						
+						return false;
 					}
 				}
-				
-				if(defended == true) {
-					estAdmissible = true;
-					//return true;
-				}
-				listeCibles.clear();
-				
-	
-			//}
+			}
+		
+			listeCibles.clear(); // On vide la liste pour entrer les prochains arguments qui contredisent l'argument courant
+			
+
+			
+		}
+		
+		/* Cas où les arguments de la solution ne sont contredits par personne */
+		if(personne == listeSolutions.size()) {
+			System.out.println("Les arguments ne sont contredits par personne.");
 		}
 		
 		return true;
 	}
 	
 	
-	public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
-	    Set<T> keys = new HashSet<T>();
-	    for (Entry<T, E> entry : map.entrySet()) {
-	        if (Objects.equals(value, entry.getValue())) {
-	            keys.add(entry.getKey());
-	        }
-	    }
-	    return keys;
-	}
-	
 	/**
-	 * Affichage simple de la solution E
+	 * Affichage simple de la solution E.
 	 */
 	public void afficherSolution() {
 		System.out.println("Affichage de la solution E :");

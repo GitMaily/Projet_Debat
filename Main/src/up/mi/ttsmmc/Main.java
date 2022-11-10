@@ -96,9 +96,6 @@ public class Main {
 					}
 					E.afficherSolution();
 
-					/*
-					 * A FAIRE
-					 */
 					break;
 					
 			case 4: E.afficherSolution();
