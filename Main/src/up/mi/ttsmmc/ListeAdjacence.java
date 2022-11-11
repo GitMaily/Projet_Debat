@@ -4,20 +4,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Cette classe va permettre de représenter le graphe orienté d'un débat. La méthode utilisée est celle de la liste d'adjacence, dans laquelle l'utilisation des HashMap est pertinente.
+ * @author Thomas_Tanguy
+ * @author Samuel_Lavallée
+ * @author Maily_Ciavaldini
+ * @version PHASE_1
+ */
 public class ListeAdjacence {
 	
 	private Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> graphMap;
 	private int nbArguments;
 
+	/**
+	 * Constructeur permettant l'initialisation d'un graphe dans un HashMap selon le nombre total d'argument. Utilisation de init().
+	 * @param nbArguments Le nombre d'arguments total dans le débat
+	 */
 	public ListeAdjacence(int nbArguments) {
 		this.nbArguments = nbArguments;
 		graphMap = new HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>>(nbArguments);
 		init();
-		
 	}
 	
 	/**
-	 * Initialise le graphe orienté avec nbArguments arguments, dont le nom est de Ax avec x allant de 1 jusqu'à nbArguments
+	 * Initialise le graphe avec nbArguments arguments, dont le nom est de Ax avec x allant de 1 jusqu'à nbArguments
 	 */
 	public void init() {
 		String nomInit = "A";
@@ -26,10 +36,8 @@ public class ListeAdjacence {
 			StringBuilder sb = new StringBuilder();
 			sb.append(nomInit);
 			sb.append(i+1);
-			//System.out.println(sb.toString());
 			ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>(); // ArrayList vide
 			graphMap.put(new ArgumentNoeud(sb.toString()), argumentsInit);
-			
 			
 		}
 	}
@@ -41,21 +49,9 @@ public class ListeAdjacence {
 	public void setGraphMap(Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> graphMap) {
 		this.graphMap = graphMap;
 	}
-	
-	
+
 	/**
-	 * Ajoute un argument dans le graphe
-	 * L'utilisateur aura, au préalable, rentré le nom de l'argument
-	 * @param noeud L'argument à ajouter
-	 */
-	/*public void ajouterArgument(ArgumentNoeud noeud) {
-		
-	}*/
-	
-	
-	
-	/**
-	 * Retire un argument dans le graphe
+	 * (non utilisée) Retire un argument dans le graphe. Au cas où nous voulions retirer un argument initial dans le graphe.
 	 * @param noeud L'argument à retirer
 	 */
 	public void retirerArgument(ArgumentNoeud noeud) {
@@ -68,7 +64,6 @@ public class ListeAdjacence {
 		else {
 			System.out.println("L'argument n'existe pas.");
 		}
-		
 	}
 	
 	/**
@@ -102,14 +97,11 @@ public class ListeAdjacence {
 		else {
 			listeArcs = new ArrayList<ArgumentNoeud>();
 		}
-		
 		listeArcs.add(argCible);
-		
-		
 	}
 	
 	/**
-	 * Affichage du graphe simple sans les contradictions
+	 * Affichage du graphe simple sans les contradictions.
 	 */
 	public void afficherGraphe() {
 		System.out.println("Affichage du graphe :");
@@ -119,16 +111,14 @@ public class ListeAdjacence {
 		System.out.println();
 	}
 	
-	
 	/**
-	 * Affichage du graphe avec les contradictions
+	 * Affichage du graphe avec les contradictions.
 	 */
 	public void afficherGrapheAvecContradictions() {
 		System.out.println("Affichage du graphe avec les contradictions :");
 		for(ArgumentNoeud noeud : graphMap.keySet()) {
 			for(ArgumentNoeud cibles : graphMap.get(noeud)) {
 				System.out.println(noeud.toString()+"-->"+cibles.toString());
-
 			}
 		}
 		System.out.println();
