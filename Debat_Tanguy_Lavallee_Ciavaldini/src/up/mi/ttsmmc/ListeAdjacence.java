@@ -12,8 +12,13 @@ import java.util.Map;
  * @version PHASE_1
  */
 public class ListeAdjacence {
-	
+	/**-
+	 * le graphe avec l'argument et sa liste d'argument qu'il contredit
+	 */
 	private Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> graphMap;
+	/**
+	 * le nombre d'arguments en tout
+	 */
 	private int nbArguments;
 
 	/**
@@ -41,11 +46,18 @@ public class ListeAdjacence {
 			
 		}
 	}
-	
+	/**
+	 * get le graphe avec l'argument et sa liste d'argument qu'il contredit
+	 * @return graphMap : correspond au graphe avec l'argument et sa liste d'argument qu'il contredit
+	 */
 	public Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> getGraphMap() {
 		return graphMap;
 	}
-
+	
+	/**
+	 * set le graphe avec l'argument et sa liste d'argument qu'il contredit
+	 * @param graphMap le nouveau graph avec l'argument et sa liste d'argument qu'il contredit
+	 */
 	public void setGraphMap(Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> graphMap) {
 		this.graphMap = graphMap;
 	}
@@ -124,10 +136,17 @@ public class ListeAdjacence {
 		System.out.println();
 	}
 	
+	/**
+	 * get le nombre d'argument
+	 * @return nbArguments : le nombre d'argument en tout
+	 */
 	public int getNbArguments() {
 		return nbArguments;
 	}
-
+	/**
+	 * set le nombre d'argmument
+	 * @param nbArguments : le nombre d'argument en tout
+	 */
 	public void setNbArguments(int nbArguments) {
 		this.nbArguments = nbArguments;
 	}

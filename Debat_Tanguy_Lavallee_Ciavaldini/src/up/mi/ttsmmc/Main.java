@@ -44,10 +44,10 @@ public class Main {
 				
 				do {
 					System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
-					nomArg1 = sc.next().toUpperCase();
+					nomArg1 = sc.next();
 					
 					System.out.println("Veuillez saisir le nom de l'argument contredit.");
-					nomArg2 = sc.next().toUpperCase();
+					nomArg2 = sc.next();
 					
 					if(nomArg1.equals(nomArg2)) {
 						System.out.println("Un argument ne peut pas se contredire soi-même. Veuillez réessayer");
@@ -100,7 +100,7 @@ public class Main {
 			boolean estAdmissible = false;
 			switch(choix) {
 			case 1: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez ajouter dans la solution");
-					String argSol = sc.next().toUpperCase();
+					String argSol = sc.next();
 					E.ajouterArgumentSolution(argSol);
 					
 					E.afficherSolution();
@@ -109,7 +109,7 @@ public class Main {
 					break;
 			
 			case 2: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez retirer de la solution");
-					String argRetirer = sc.next().toUpperCase();
+					String argRetirer = sc.next();
 					E.retirerArgumentSolution(argRetirer);
 					E.afficherSolution();
 					System.out.println();
@@ -117,7 +117,7 @@ public class Main {
 					break;
 					
 			case 3: System.out.println("/!\\ Vérification de la solution /!\\");
-					estAdmissible = E.solutionAdmissible();
+					estAdmissible = E.solutionAdmissibleNew();
 					System.out.println();
 					if(estAdmissible) {
 						System.out.println("La solution est donc admissible.");
