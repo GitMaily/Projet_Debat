@@ -1,5 +1,8 @@
 package up.mi.ttsmmc;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +15,7 @@ import java.util.Map;
  * @version PHASE_1
  */
 public class ListeAdjacence {
+	
 	/**-
 	 * le graphe avec l'argument et sa liste d'argument qu'il contredit
 	 */
@@ -20,6 +24,10 @@ public class ListeAdjacence {
 	 * le nombre d'arguments en tout
 	 */
 	private int nbArguments;
+	
+	public ListeAdjacence() {
+		graphMap = new HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>>(nbArguments);
+	}
 
 	/**
 	 * Constructeur permettant l'initialisation d'un graphe dans un HashMap selon le nombre total d'argument. Utilisation de init().
@@ -46,6 +54,30 @@ public class ListeAdjacence {
 			
 		}
 	}
+	
+	public void extractArgument(String filePath) {
+		String line;
+		ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
+		try {
+			// on créer un bufferReader qui va lire les lignes dans le fichier
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while((line = reader.readLine())!= null) {
+				int index = line.indexOf("Argument(");
+				if(index != -1) {
+					//si le mot est présent, récupérer la chaine entre les parenthèses
+					int start = index + "Argument(".length();
+					int end = line.indexOf(")", start);
+					String argument = line.substring(start, end);
+					graphMap.put(new ArgumentNoeud(argument), argumentsInit);
+					}
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/**
 	 * get le graphe avec l'argument et sa liste d'argument qu'il contredit
 	 * @return graphMap : correspond au graphe avec l'argument et sa liste d'argument qu'il contredit
