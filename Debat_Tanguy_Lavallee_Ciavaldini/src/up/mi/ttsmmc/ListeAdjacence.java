@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  * Cette classe va permettre de représenter le graphe orienté d'un débat. La méthode utilisée est celle de la liste d'adjacence, dans laquelle l'utilisation des HashMap est pertinente.
@@ -26,7 +30,7 @@ public class ListeAdjacence {
 	private int nbArguments;
 	
 	public ListeAdjacence() {
-		graphMap = new HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>>(nbArguments);
+		graphMap = new HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>>();
 	}
 
 	/**
@@ -55,6 +59,84 @@ public class ListeAdjacence {
 		}
 	}
 	
+	public void extractContradiction2(String filePath) {
+		String line;
+		ArrayList<ArgumentNoeud> argumentsArray;
+		Pattern pattern = Pattern.compile("contradiction\\((.+),(.+)\\)");
+		try {	
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while((line = reader.readLine()) != null) {
+				Matcher matcher = pattern.matcher(line);
+				if(matcher.find()) {
+					String element1 = matcher.group(1);
+                    String element2 = matcher.group(2);
+                    
+                    ArgumentNoeud arg = new ArgumentNoeud(element1);
+                    ArgumentNoeud arg2 = new ArgumentNoeud(element2);
+					
+					if(graphMap.containsKey(arg)) {
+						argumentsArray = graphMap.get(arg);
+						argumentsArray.add(arg2);
+					}
+					else {
+						System.out.println("L'argument n'existe pas");
+					}
+				}
+			}
+			reader.close();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param filePath
+	 */
+	public void extractContradiction(String filePath) {
+		String line;
+		ArrayList<ArgumentNoeud> argumentsArray;
+		try {	
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while((line = reader.readLine()) != null) {
+				if(line.contains("contradiction(")) {
+					int start = line.indexOf("(");
+					int end = line.indexOf(",");
+					
+					int start2 = line.indexOf(",");
+					int end2 = line.indexOf(")");
+					String argument1 = line.substring(start + 1, end);;
+					String argument2 = line.substring(start2 + 1, end2);
+					
+					ArgumentNoeud arg = new ArgumentNoeud("("+argument1+")");
+					ArgumentNoeud arg2 = new ArgumentNoeud("("+argument2+")");
+					
+					System.out.println(argument1);
+					System.out.println(argument2);
+					System.out.println("arg : " + arg.getNomArgument());
+					Set<ArgumentNoeud> keys = graphMap.keySet();
+					for (ArgumentNoeud key : keys) {
+					    System.out.println(key);
+					}
+					if(graphMap.containsKey(arg)) {
+						argumentsArray = graphMap.get(arg);
+						argumentsArray.add(arg2);
+					}
+					else {
+						System.out.println("L'argument n'existe pas");
+					}
+				}
+			}
+			reader.close();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Récupère tous les argument d'un fichier de la forme : "Argument(N)" et les met
+	 * dans le graphe en initialisant une liste vide
+	 * @param filePath le chemin du fichier
+	 */
 	public void extractArgument(String filePath) {
 		String line;
 		ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
@@ -62,14 +144,16 @@ public class ListeAdjacence {
 			// on créer un bufferReader qui va lire les lignes dans le fichier
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
 			while((line = reader.readLine())!= null) {
-				int index = line.indexOf("Argument(");
+				// recherchez le mot "Argument(" dans chaque ligne
+				int index = line.indexOf("argument(");
 				if(index != -1) {
 					//si le mot est présent, récupérer la chaine entre les parenthèses
-					int start = index + "Argument(".length();
+					int start = index + "argument(".length();
 					int end = line.indexOf(")", start);
 					String argument = line.substring(start, end);
 					graphMap.put(new ArgumentNoeud(argument), argumentsInit);
 					}
+				
 			}
 			reader.close();
 		} catch (IOException e) {
