@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +28,10 @@ public class ListeAdjacence {
 	 * le nombre d'arguments en tout
 	 */
 	private int nbArguments;
-	
+	/**
+	 * Constructeur permmettant la création d'un graphe mais sans son initialisation
+	 * ce constructeur est utiliser lorsque l'on a besoin de lire un fichier au préalable déjà remplie
+	 */
 	public ListeAdjacence() {
 		graphMap = new HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>>();
 	}
@@ -45,6 +48,7 @@ public class ListeAdjacence {
 	
 	/**
 	 * Initialise le graphe avec nbArguments arguments, dont le nom est de Ax avec x allant de 1 jusqu'à nbArguments
+	 * dans le graphe en initialisant une liste vide
 	 */
 	public void init() {
 		String nomInit = "A";
@@ -59,41 +63,13 @@ public class ListeAdjacence {
 		}
 	}
 	
-	public void extractContradiction2(String filePath) {
-		String line;
-		ArrayList<ArgumentNoeud> argumentsArray;
-		Pattern pattern = Pattern.compile("contradiction\\((.+),(.+)\\)");
-		try {	
-			BufferedReader reader = new BufferedReader(new FileReader(filePath));
-			while((line = reader.readLine()) != null) {
-				Matcher matcher = pattern.matcher(line);
-				if(matcher.find()) {
-					String element1 = matcher.group(1);
-                    String element2 = matcher.group(2);
-                    
-                    ArgumentNoeud arg = new ArgumentNoeud(element1);
-                    ArgumentNoeud arg2 = new ArgumentNoeud(element2);
-					
-					if(graphMap.containsKey(arg)) {
-						argumentsArray = graphMap.get(arg);
-						argumentsArray.add(arg2);
-					}
-					else {
-						System.out.println("L'argument n'existe pas");
-					}
-				}
-			}
-			reader.close();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
-	 * 
-	 * @param filePath
+	 * Récupère les contradiction dans un fichier de la forme : "contradiction(N1,N2)
+	 * avec N1 qui contredit N2
+	 * @param filePath le chemin du fichier
+	 * @throws Exception 
 	 */
-	public void extractContradiction(String filePath) {
+	public void extractContradiction(String filePath) throws Exception {
 		String line;
 		ArrayList<ArgumentNoeud> argumentsArray;
 		try {	
@@ -108,22 +84,15 @@ public class ListeAdjacence {
 					String argument1 = line.substring(start + 1, end);;
 					String argument2 = line.substring(start2 + 1, end2);
 					
-					ArgumentNoeud arg = new ArgumentNoeud("("+argument1+")");
-					ArgumentNoeud arg2 = new ArgumentNoeud("("+argument2+")");
+					ArgumentNoeud arg = new ArgumentNoeud(argument1.trim());
+					ArgumentNoeud arg2 = new ArgumentNoeud(argument2.trim());
 					
-					System.out.println(argument1);
-					System.out.println(argument2);
-					System.out.println("arg : " + arg.getNomArgument());
-					Set<ArgumentNoeud> keys = graphMap.keySet();
-					for (ArgumentNoeud key : keys) {
-					    System.out.println(key);
-					}
-					if(graphMap.containsKey(arg)) {
-						argumentsArray = graphMap.get(arg);
-						argumentsArray.add(arg2);
-					}
-					else {
-						System.out.println("L'argument n'existe pas");
+					
+					for(ArgumentNoeud noeud : graphMap.keySet()) {
+						if(noeud.getNomArgument().equals(arg.getNomArgument())) {		
+							argumentsArray = graphMap.get(noeud);
+							argumentsArray.add(arg2);
+						}
 					}
 				}
 			}
@@ -132,6 +101,7 @@ public class ListeAdjacence {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Récupère tous les argument d'un fichier de la forme : "Argument(N)" et les met
 	 * dans le graphe en initialisant une liste vide
@@ -139,11 +109,12 @@ public class ListeAdjacence {
 	 */
 	public void extractArgument(String filePath) {
 		String line;
-		ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
+		
 		try {
 			// on créer un bufferReader qui va lire les lignes dans le fichier
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
 			while((line = reader.readLine())!= null) {
+				
 				// recherchez le mot "Argument(" dans chaque ligne
 				int index = line.indexOf("argument(");
 				if(index != -1) {
@@ -151,6 +122,7 @@ public class ListeAdjacence {
 					int start = index + "argument(".length();
 					int end = line.indexOf(")", start);
 					String argument = line.substring(start, end);
+					ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
 					graphMap.put(new ArgumentNoeud(argument), argumentsInit);
 					}
 				
