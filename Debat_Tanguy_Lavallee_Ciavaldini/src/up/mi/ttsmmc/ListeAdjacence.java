@@ -81,19 +81,22 @@ public class ListeAdjacence {
 					
 					int start2 = line.indexOf(",");
 					int end2 = line.indexOf(")");
-					String argument1 = line.substring(start + 1, end);;
-					String argument2 = line.substring(start2 + 1, end2);
+					String argument1 = line.substring(start + 1, end).trim();
+					String argument2 = line.substring(start2 + 1, end2).trim();
 					
 					ArgumentNoeud arg = new ArgumentNoeud(argument1.trim());
 					ArgumentNoeud arg2 = new ArgumentNoeud(argument2.trim());
 					
+					ajouterContradiction(argument1, argument2);
 					
-					for(ArgumentNoeud noeud : graphMap.keySet()) {
+					
+					
+					/*for(ArgumentNoeud noeud : graphMap.keySet()) {
 						if(noeud.getNomArgument().equals(arg.getNomArgument())) {		
 							argumentsArray = graphMap.get(noeud);
 							argumentsArray.add(arg2);
 						}
-					}
+					}*/
 				}
 			}
 			reader.close();
@@ -123,8 +126,10 @@ public class ListeAdjacence {
 					int end = line.indexOf(")", start);
 					String argument = line.substring(start, end);
 					ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
+					
+					
 					graphMap.put(new ArgumentNoeud(argument), argumentsInit);
-					}
+				}
 				
 			}
 			reader.close();

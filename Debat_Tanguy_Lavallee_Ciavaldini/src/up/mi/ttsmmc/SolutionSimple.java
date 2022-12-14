@@ -33,6 +33,11 @@ public class SolutionSimple {
 		listeSolutions = new ArrayList<ArgumentNoeud>();
 	}
 	
+	public SolutionSimple(ArrayList<ArgumentNoeud> listeArgumentsPossibles, ListeAdjacence graphe) {
+		this.listeSolutions = listeArgumentsPossibles;
+		this.graphe = graphe;
+	}
+	
 	/**
 	 * Ajoute un argument dans la solution potentielle E après avoir vérifié qu'il n'est pas déjà présent
 	 * @param nomArg L'argument à ajouter dans E
@@ -268,6 +273,8 @@ public class SolutionSimple {
 			for(int i = 0;i<listeSolutions.size();i++) {
 				// Vérifie si il existe un arc entre chaque argument dans la solution
 				// Plus techniquepent, vérifie si la liste des arguments que contredit l'argument contradicteur contient un argument dans la liste
+				//System.out.println(graphe.getGraphMap().get(arg).toString()+" contains?"+listeSolutions.get(i).toString());
+				
 				if(graphe.getGraphMap().get(arg).contains(listeSolutions.get(i))) {
 					System.out.println("Contradication interne, la solution n'est pas admissible.");
 					System.out.println("En effet, "+arg.getNomArgument()+" contredit "+listeSolutions.get(i).getNomArgument());
