@@ -1,6 +1,7 @@
 package up.mi.ttsmmc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class RechercheSolution{
 	
 	private ListeAdjacence graphe;
 	private ArrayList<ArgumentNoeud> proposition;
-	private ArrayList<ArrayList<ArgumentNoeud>> listePropositions;
+	private List<ArrayList<ArgumentNoeud>> listePropositions;
 	
 	public RechercheSolution(ListeAdjacence graphe) {
 		this.graphe = graphe;
@@ -24,125 +25,203 @@ public class RechercheSolution{
 
 	}
 	
-	/*public HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>> enumerationEnsemblesPossibles(){
-		
-		
-		for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
-			ArrayList<ArgumentNoeud> combinaisonsPossibles = new ArrayList<ArgumentNoeud>();
-			ensemblesPossibles.put(noeud, combinaisonsPossibles);
-		}
-		
-		boolean verif = false;
-		for(ArgumentNoeud arg1 : ensemblesPossibles.keySet()) {
-
-			for(ArgumentNoeud arg2 : ensemblesPossibles.keySet()) {
-				if(arg1.getNomArgument().equals(arg2.getNomArgument())) {
-					ensemblesPossibles.get(arg1).add(arg2);
-					SolutionSimple solution = new SolutionSimple(ensemblesPossibles.get(arg1),graphe);
-					verif = solution.solutionAdmissible();
-					
-					if(verif == false) {
-						//solution.retirerArgumentSolution(arg2.getNomArgument());
-					}
-					else {
-						for(ArgumentNoeud arg : ensemblesPossibles.get(arg1)) {
-							proposition.add(arg);
-							listePropositions.add(new ArrayList<ArgumentNoeud>());
-
-						}
-					}
-				}
-				else {
-					System.out.println("On ne veut pas ajouter lui-même");
-				}
-			}
-		}
-		
-		System.out.println(ensemblesPossibles);
-		return ensemblesPossibles;
-	}*/
-	
 	public void afficherListePropositions() {
 		for(int i =0;i<listePropositions.size();i++) {
 			listePropositions.get(i).toString();
 		}
 	}
 	
-	public void enumeration() {
-		ArrayList<ArrayList<ArgumentNoeud>> combinaisonsPossibles;
+	// Cette méthode génère toutes les combinaisons possibles sans duplicata
+    // et les ajoute à la liste des combinaisons
+    public List<List<ArgumentNoeud>> genererCombinaisons() {
+    	
+    	/**
+		 * Liste des arguments du graphe
+		 */
+		ArrayList<ArgumentNoeud> listeArguments = new ArrayList<ArgumentNoeud>();
 		for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
-			ArrayList<ArgumentNoeud> listeInterne = new ArrayList<ArgumentNoeud>();
+			listeArguments.add(noeud);
+		}
+    	
+    	List<List<ArgumentNoeud>> combinaisons = new ArrayList<>();
 
-			combinaisonsPossibles = new ArrayList<ArrayList<ArgumentNoeud>>();
-			//combinaisonsPossibles.add(listeInterne);
-			ensemblesPossibles.put(noeud, combinaisonsPossibles);
-			
-			/*for(int i = 0;i<combinaisonsPossibles.size();i++) {
-				ArrayList<ArgumentNoeud> listeInterne = new ArrayList<ArgumentNoeud>();
-				combinaisonsPossibles.add(listeInterne);
-			}*/
+    	/**
+    	 * Ajouter l'ensemble vide en premier
+    	 */
+    	combinaisons.add(new ArrayList<>());
+    	
+        // Commencer par ajouter tous les objets individuellement à la liste des combinaisons
+        for (ArgumentNoeud arg : listeArguments) {
+            List<ArgumentNoeud> combination = new ArrayList<>();
+            combination.add(arg);
+            combinaisons.add(combination);
+        }
+
+        // Répéter jusqu'à ce qu'il n'y ait plus de combinaisons à ajouter
+        boolean manqueCombinaisons = true;
+        boolean dernier = false;
+        while (manqueCombinaisons) {
+            manqueCombinaisons = false;
+
+            // Pour chaque combinaison existante...
+            for (int i = 0; i < combinaisons.size(); i++) {
+                List<ArgumentNoeud> uneCombinaison = combinaisons.get(i);
+
+                // ...ajouter tous les objets qui ne sont pas déjà dans la combinaison...
+                for (ArgumentNoeud arg : listeArguments) {
+                	
+                    if (!uneCombinaison.contains(arg)) {
+                        List<ArgumentNoeud> nouvCombinaison = new ArrayList<>(uneCombinaison);
+                        nouvCombinaison.add(arg);
+                        
+
+                        // ...mais seulement si la nouvelle combinaison n'existe pas déjà
+                        if (!combinaisons.contains(nouvCombinaison) && dernier == false) {
+                        	dernier = false;
+                        	combinaisons.add(nouvCombinaison);
+                            
+                            
+                            manqueCombinaisons = true;
+                            
+                            if(nouvCombinaison.size() == listeArguments.size()) {
+                            	//dernier = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        supprimerDoublons(combinaisons);
+
+        System.out.println("apres");
+
+        for (List<ArgumentNoeud> combination : combinaisons) {
+  		  System.out.println(combination);
+  		}
+        return combinaisons;
+    }
+	
+	
+	public List<List<ArgumentNoeud>> combinaisons() {
+		
+		/**
+		 * Liste des arguments du graphe
+		 */
+		ArrayList<ArgumentNoeud> listeArguments = new ArrayList<ArgumentNoeud>();
+		for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
+			listeArguments.add(noeud);
 		}
 		
-		int count = 0;
-		ArrayList<ArgumentNoeud> listePrecedente;
-		
-		/*for(ArgumentNoeud arg1 : ensemblesPossibles.keySet()) {
-			for(ArgumentNoeud arg2 : ensemblesPossibles.keySet()) {
-				listePrecedente = ensemblesPossibles.get(arg1).get(count);
-				ensemblesPossibles.get(arg1).add(listePrecedente);
-				
-			}
-		}*/
-		
-		
-		
-		
-		
-		/*for(ArgumentNoeud arg1 : ensemblesPossibles.keySet()) {
-			for(int i = 0;i<ensemblesPossibles.size();i++) {
-				ArrayList<ArgumentNoeud> listeInterne = new ArrayList<ArgumentNoeud>();
-				ensemblesPossibles.get(arg1).add(listeInterne);
-				listeInterne.add(arg1);
-				
-			}
-			
-			count++;
+	    List<ArgumentNoeud> args = listeArguments;
 
-		}*/
-		
+	    //int count = 0;
+	    
+	    /**
+	     * On génère toutes les combinaisons possibles de la liste des arguments
+	     */
+	    List<List<ArgumentNoeud>> combs = new ArrayList<>();
+	    for (int i = 0; i < args.size(); i++) {
+	      for (int j = i + 1; j <= args.size(); j++) {
+	        List<ArgumentNoeud> subList = args.subList(i, j);
+	        combs.add(subList);
+	        
+	      }
+	      /*if(i != 0) {
+	  	      for (int k = 0; k < count ; k++) {
+	  	    	  args.get(k);
+	  	    	List<ArgumentNoeud> subList2 = args.subList(k, count);
+		        combs.add(subList2);
+	  	      }
+          }*/
+	    }
 
-		
-		
-		System.out.println(ensemblesPossibles.toString());
-		
-		
-		/*for(ArgumentNoeud noeud : ensemblesPossibles.keySet()) {
-			listePropositions.add()
-		}*/
-		//listePropositions = ensemblesPossibles;
+	    // Affichage des combinaisons
+	    for (List<ArgumentNoeud> c : combs) {
+	      System.out.println(c);
+	    }
+	  return combs;
 	}
 	
-	public ArrayList<ArrayList<ArgumentNoeud>> calculeSolutionsAdm(){
+	
+	
+	
+	
+	
+	public List<List<ArgumentNoeud>> calculerSolutionsAdmissibles(){
+		List<List<ArgumentNoeud>> listeDesCombinaisons = genererCombinaisons();
+		
+		List<List<ArgumentNoeud>> res = new ArrayList<>();
+		
+		for(List<ArgumentNoeud> ensemble : listeDesCombinaisons) {
+			SolutionSimple solution = new SolutionSimple(ensemble,graphe);
 
-		
-		ArrayList<ArrayList<ArgumentNoeud>> res = new ArrayList<ArrayList<ArgumentNoeud>>(); // = listeAdmissible
-		
-		for(ArrayList<ArgumentNoeud> proposition : listePropositions) {
-			SolutionSimple solution = new SolutionSimple(proposition,graphe);
-			
-			System.out.println("***** Vérification de cet ensemble :"+proposition.toString()+" *****");
-			
-			if(solution.solutionAdmissible()) {
-				System.out.println("trouvé un ensemble admissible !");
-				res.add(proposition);
+			if(solution.solutionAdmissible2()) {
+				res.add(ensemble);
 			}
 		}
 		
+		
+		List<List<ArgumentNoeud>> ensemblesASupprimer = new ArrayList<>();
+
+		
+		boolean duplicata = false;
+		//for(List<ArgumentNoeud> admissible : res) {
+			
+		
+		supprimerDoublons(res);
+		
+		/*for(int i = 0;i<res.size();i++) {
+				for(int j = 0;j<res.size();j++) {
+					if((res.get(i).size()!= 0) && (res.get(j).size() != 0) && res.get(i).size() == res.get(j).size()) {
+
+						if(!res.get(i).equals(res.get(j))) {
+							if(res.get(i).containsAll(res.get(j))) {
+								duplicata = true;
+								//ensemblesASupprimer.add(res.get(i));
+								res.remove(j);
+						}
+						
+						
+					}
+				}
+			}
+		}*/
 		
 		
 		return res;
+		
+		
 	}
 	
+	
+	private List<List<ArgumentNoeud>> supprimerDoublons(List<List<ArgumentNoeud>> listeDeListes){
+		
+		List<Integer> indiceDesEnsemblesASupprimer = new ArrayList<Integer>();
+
+		
+		for(int i = 0;i<listeDeListes.size();i++) {
+			System.out.println(listeDeListes.size());
+			System.out.println("index"+i);
+			for(int j = 0;j<listeDeListes.size();j++) {
+				if((listeDeListes.get(i).size()!= 0) && (listeDeListes.get(j).size() != 0) && (listeDeListes.get(i).size() == listeDeListes.get(j).size())) {
+
+					if(!listeDeListes.get(i).equals(listeDeListes.get(j))) {
+						if(listeDeListes.get(i).containsAll(listeDeListes.get(j))) {
+							//duplicata = true;
+							//ensemblesASupprimer.add(res.get(i));
+							//indiceDesEnsemblesASupprimer.add(j);
+							listeDeListes.remove(j);
+					}
+					
+					
+					}
+				}
+			}
+		}
+		
+		return listeDeListes;
+	}
 	
 	
 	

@@ -3,6 +3,7 @@ package up.mi.ttsmmc;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Main2 {
 
@@ -31,23 +32,23 @@ public class Main2 {
 		
 		RechercheSolution recherche = new RechercheSolution(graphe);
 		
-		ArrayList<ArrayList<ArgumentNoeud>> ensemblesPossibles;
+		List<List<ArgumentNoeud>> ensemblesPossibles;
 
 
-		recherche.enumeration();
-		ensemblesPossibles = recherche.calculeSolutionsAdm();
+		//ensemblesPossibles = recherche.genererCombinaisons();
+		//System.out.print(ensemblesPossibles);
 		
-		System.out.println(ensemblesPossibles.toString());
+		System.out.println("Voici les ensembles admissibles qu'on devra proposer un par un : \n"+recherche.calculerSolutionsAdmissibles());
 		
-		/*
-		HashMap<ArgumentNoeud,ArrayList<ArgumentNoeud>> ensemblesPossibles2;
-		ensemblesPossibles2 = recherche.enumerationEnsemblesPossibles();
-		System.out.println("avec ensemblePossibles2"+ensemblesPossibles2.toString());
+		
+		
+		
+		
+		/*List<List<ArgumentNoeud>> listeComb2 = recherche.combinaisons();
+		System.out.println(listeComb2);
+		ensemblesPossibles = recherche.calculerSolutionsAdmissibles2();
+		
+		System.out.println("Voici les ensembles admissibles qu'on devra proposer un par un : \n"+ensemblesPossibles.toString());
 		*/
-		
-		
-		/*System.out.println("Affichage de la liste des propositions");
-		recherche.afficherListePropositions();*/
-		//ArrayList<ArgumentNoeud> listeAdmissible = recherche.calculeSolutionsAdm();
 	}
 }
