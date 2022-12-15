@@ -1,5 +1,6 @@
 package up.mi.ttsmmc;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,17 +57,18 @@ public class RechercheSolution{
 	    try {
 	      // Créer un écrivain pour écrire dans le fichier
 	      FileWriter writer = new FileWriter(file);
+	      BufferedWriter bw = new BufferedWriter(writer); // création d'un tampon pour optimiser
 	      
 	      // Écrire chaque élément de la liste dans le fichier, en ajoutant un saut de ligne à la fin de chaque élément
 	      for (ArgumentNoeud item : solution) {
-	        writer.write("argument("+item.getNomArgument()+").\n");
+	        bw.write("argument("+item.getNomArgument()+").\n");
 	      }
 	      
 	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName());
 	      
-	      // Fermer l'écrivain une fois que l'on a fini d'écrire dans le fichier
+	      // Fermer l'écrivain et le tampon une fois que l'on a fini d'écrire dans le fichier
+	      bw.close();
 	      writer.close();
-	      
 	    } catch (IOException e) {
 	      e.printStackTrace();
 	    }
