@@ -10,15 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * cette classe sert a rechercher les solution admissible et préféré ainsi que de sauvegarder
+ * dans un fichier une solution
+ * @author Thomas_Tanguy
+ * @author Samuel_Lavallée
+ * @author Maily_Ciavaldini
+ * @version PHASE_2
+ */
 public class RechercheSolution{
 	
 	HashMap<ArgumentNoeud,ArrayList<ArrayList<ArgumentNoeud>>> ensemblesPossibles;
 	
-	
+	//variable
 	private ListeAdjacence graphe;
 	private ArrayList<ArgumentNoeud> proposition;
 	private List<ArrayList<ArgumentNoeud>> listePropositions;
 	
+	//constructeur
 	public RechercheSolution(ListeAdjacence graphe) {
 		this.graphe = graphe;
 		ensemblesPossibles = new HashMap<ArgumentNoeud,ArrayList<ArrayList<ArgumentNoeud>>>();
@@ -28,7 +37,9 @@ public class RechercheSolution{
 		listePropositions = new ArrayList<ArrayList<ArgumentNoeud>>();
 
 	}
-	
+	/*
+	 * affiche la liste des propositions
+	 */
 	public void afficherListePropositions() {
 		for(int i =0;i<listePropositions.size();i++) {
 			listePropositions.get(i).toString();
