@@ -27,24 +27,20 @@ public class Main2 {
 		
 		System.out.println("* * * * * Représentation du graphe * * * * * ");
 		ListeAdjacence graphe = new ListeAdjacence();
-		graphe.extractArgument(fileName);
+		graphe.extractArgument(args[0]);
 		graphe.afficherGraphe();
-		graphe.extractContradiction(fileName);
+		graphe.extractContradiction(args[0]);
 		graphe.afficherGrapheAvecContradictions();
 		
 		graphe.afficherGraphe();
 		
-		  /**
-	     * à supprimer
-	     */
-	    ArrayList<ArgumentNoeud> list = new ArrayList<ArgumentNoeud>();
-		list.add(new ArgumentNoeud("A1"));
-		list.add(new ArgumentNoeud("A4"));
-		list.add(new ArgumentNoeud("A3"));
+		
+	   
 		Scanner scanner = new Scanner(System.in);
 	
 		RechercheSolution recherche = new RechercheSolution(graphe);
 		int choice;
+		List<ArgumentNoeud> sortie =new ArrayList<>();;//solution a afficher a la fin et dans la save qui sera actualiser a chaque affichage soit d admi soit de pref
 		do {
 		
 			System.out.println("1) chercher une solution admissible");
@@ -56,17 +52,33 @@ public class Main2 {
 			switch (choice) {
 			case 1:
 				System.out.println("Vous avez choisi l'option 1 : chercher une solution admissible");
+				List<ArgumentNoeud> entree_admi=new ArrayList<>();;
+				if(sortie.size()!=0) {
+					sortie.clear();
+					sortie.addAll(entree_admi);
+				}
+				
+				
+				
 				break;
 			case 2:
 				System.out.println("Vous avez choisi l'option 2 : chercher une solution préférée");
+				List<ArgumentNoeud> entree_pref=new ArrayList<>();;
+				if(sortie.size()!=0) {
+					sortie.clear();
+					sortie.addAll(entree_pref);
+				}
+				
 				break;
 			case 3:
 				System.out.println("Vous avez choisi l'option 3 : sauvegarder la solution");
+				System.out.println("Solution a sauvegarder "+sortie.toString());
 				System.out.println("Entrez le chemin du fichier : ");
 				Scanner scanner2 = new Scanner(System.in);
 				String lien = scanner2.nextLine();
-				recherche.sauvegarderLaSolution(list, lien);
+				recherche.sauvegarderLaSolution(sortie, lien);
 				break;
+				
 			case 4:
 				System.out.println("Vous avez choisi l'option 4 : fin");
 				break;
