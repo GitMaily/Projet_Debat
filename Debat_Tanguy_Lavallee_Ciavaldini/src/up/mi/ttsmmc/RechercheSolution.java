@@ -1,5 +1,8 @@
 package up.mi.ttsmmc;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,9 +33,48 @@ public class RechercheSolution{
 			listePropositions.get(i).toString();
 		}
 	}
+	/**
+	 * cette méthode sauvegarde la liste de solution dans un fichier
+	 * @param solution la liste de solution
+	 * @param filePath le chemin du fichier
+	 */
+	public void sauvegarderLaSolution(ArrayList<ArgumentNoeud> solution, String filePath) {
+	    
+		// Créer un nouveau fichier en utilisant le chemin spécifié
+	    
+		File file = new File(filePath);
+	    
+		// On regarde si le fichier existe ou pas, si il n'existe pas on en créer un
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	    try {
+	      // Créer un écrivain pour écrire dans le fichier
+	      FileWriter writer = new FileWriter(file);
+	      
+	      // Écrire chaque élément de la liste dans le fichier, en ajoutant un saut de ligne à la fin de chaque élément
+	      for (ArgumentNoeud item : solution) {
+	        writer.write("argument("+item.getNomArgument()+").\n");
+	      }
+	      
+	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName());
+	      
+	      // Fermer l'écrivain une fois que l'on a fini d'écrire dans le fichier
+	      writer.close();
+	      
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
 	
 	// Cette méthode génère toutes les combinaisons possibles sans duplicata
     // et les ajoute à la liste des combinaisons
+	
     public List<List<ArgumentNoeud>> genererCombinaisons() {
     	
     	/**
