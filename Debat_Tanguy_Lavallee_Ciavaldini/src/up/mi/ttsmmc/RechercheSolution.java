@@ -39,7 +39,7 @@ public class RechercheSolution{
 	 * @param solution la liste de solution
 	 * @param filePath le chemin du fichier
 	 */
-	public void sauvegarderLaSolution(ArrayList<ArgumentNoeud> solution, String filePath) {
+	public void sauvegarderLaSolution(List<ArgumentNoeud> solution, String filePath) {
 	    
 		// Créer un nouveau fichier en utilisant le chemin spécifié
 	    
@@ -64,7 +64,7 @@ public class RechercheSolution{
 	        bw.write("argument("+item.getNomArgument()+").\n");
 	      }
 	      
-	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName());
+	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName() + "\n");
 	      
 	      // Fermer l'écrivain et le tampon une fois que l'on a fini d'écrire dans le fichier
 	      bw.close();
