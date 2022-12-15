@@ -26,11 +26,18 @@ public class SolutionSimple {
 	
 	/**
 	 * Constructeur qui crée un arrayList vide pour entrer des arguments dans la solution E selon la graphe entré
+	 * @param proposition 
 	 * @param graphe Le graphe crée au préalable
 	 */
 	public SolutionSimple(ListeAdjacence graphe) {
 		this.graphe = graphe;
 		listeSolutions = new ArrayList<ArgumentNoeud>();
+	}
+	
+	
+	public SolutionSimple(List<ArgumentNoeud> proposition, ListeAdjacence graphe) {
+		this.listeSolutions = proposition;
+		this.graphe = graphe;
 	}
 	
 	public SolutionSimple(ArrayList<ArgumentNoeud> listeArgumentsPossibles, ListeAdjacence graphe) {
