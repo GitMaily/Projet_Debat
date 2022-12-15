@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
  * Cette classe va permettre de représenter le graphe orienté d'un débat. La méthode utilisée est celle de la liste d'adjacence, dans laquelle l'utilisation des HashMap est pertinente.
+ * elle permet aussi d'extraire d'un fichier les arguments et les contradiction pour les lire
  * @author Thomas_Tanguy
  * @author Samuel_Lavallée
  * @author Maily_Ciavaldini
- * @version PHASE_1
+ * @version PHASE_2
  */
 public class ListeAdjacence {
 	
-	/**-
+	/**
 	 * le graphe avec l'argument et sa liste d'argument qu'il contredit
 	 */
 	private Map <ArgumentNoeud,ArrayList<ArgumentNoeud>> graphMap;
@@ -63,6 +63,114 @@ public class ListeAdjacence {
 		}
 	}
 	
+	
+	/**
+	 * methode qui permet de voir si le fichier est bien former
+	 * @param pathFile le chemin du fichier
+	 */
+	public void lireFile(String pathFile) {
+		 try {
+		      // Créer un objet BufferedReader pour lire le fichier
+		      BufferedReader reader = new BufferedReader(new FileReader(pathFile));
+
+		      // Lire chaque ligne du fichier
+		      String line;
+		      while ((line = reader.readLine()) != null) {
+		        // Vérifier si la ligne respecte la nomenclature
+		        if (line.matches("^argument\\(([^,()]+)\\)\\.$")) {
+		        	
+		        }
+		        else if (line.matches("^contradiction\\(([^,()]+),([^,()]+)\\)\\.$")){
+		        	
+		        }
+		        else {
+		        	System.err.println("Le fichier est mal formé");
+		        	System.exit(0);
+		        	
+		        	reader.close();
+		        }
+		      }
+
+		      reader.close();
+		    } catch (IOException e) {
+		    	System.err.println("Le fichier n'existe pas");
+		    	System.exit(0);
+		    }
+	}
+	
+	/**
+	 * verifie si dans une contradiction un argument n'existe pas
+	 * et arrete le programme "proprement"
+	 * verifie si le nom d'un argument ne contient pas argument ou contradiction
+	 * @param filePath le chemin du fichier
+	 * @param arguments la liste d'argument en string
+	 */
+	public void argumentExistePas(String filePath,ArrayList<String> arguments) {
+		String line;
+		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while((line = reader.readLine())!= null) {
+				if(line.contains("contradiction(")) {
+					int start = line.indexOf("(");
+					int end = line.indexOf(",");
+					
+					String argument1 = line.substring(start + 1, end).trim();
+					
+					if(!(arguments.contains(argument1))) {
+						System.err.println("Le fichier est mal formé");
+						System.exit(0);
+					}
+					for(String s : arguments) {
+						if(s.contains("argument") || s.contains("contradiction")) {
+							System.err.println("Le fichier est mal formé");
+							System.exit(0);
+						}
+					}
+					
+				}
+				
+			}
+			reader.close();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * retourne la liste des argument dans une liste de string
+	 * @param filePath le chemin du fichier
+	 * @return la liste des arguments
+	 */
+	public ArrayList<String> argumentList(String filePath) {
+		String line;
+		ArrayList<String> arguments = new ArrayList<String>();
+		try {
+			// on créer un bufferReader qui va lire les lignes dans le fichier
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while((line = reader.readLine())!= null) {
+				
+				// recherchez le mot "Argument(" dans chaque ligne
+				int index = line.indexOf("argument(");
+				if(index != -1) {
+					//si le mot est présent, récupérer la chaine entre les parenthèses
+					int start = index + "argument(".length();
+					int end = line.indexOf(")", start);
+					String argument = line.substring(start, end);
+					
+					
+					arguments.add(argument);
+				}	
+			}
+			
+			reader.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return arguments;
+	}
 	/**
 	 * Récupère les contradiction dans un fichier de la forme : "contradiction(N1,N2)
 	 * avec N1 qui contredit N2
@@ -71,7 +179,6 @@ public class ListeAdjacence {
 	 */
 	public void extractContradiction(String filePath) throws Exception {
 		String line;
-		ArrayList<ArgumentNoeud> argumentsArray;
 		try {	
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
 			while((line = reader.readLine()) != null) {
@@ -84,19 +191,9 @@ public class ListeAdjacence {
 					String argument1 = line.substring(start + 1, end).trim();
 					String argument2 = line.substring(start2 + 1, end2).trim();
 					
-					ArgumentNoeud arg = new ArgumentNoeud(argument1.trim());
-					ArgumentNoeud arg2 = new ArgumentNoeud(argument2.trim());
 					
 					ajouterContradiction(argument1, argument2);
 					
-					
-					
-					/*for(ArgumentNoeud noeud : graphMap.keySet()) {
-						if(noeud.getNomArgument().equals(arg.getNomArgument())) {		
-							argumentsArray = graphMap.get(noeud);
-							argumentsArray.add(arg2);
-						}
-					}*/
 				}
 			}
 			reader.close();
@@ -124,7 +221,7 @@ public class ListeAdjacence {
 					//si le mot est présent, récupérer la chaine entre les parenthèses
 					int start = index + "argument(".length();
 					int end = line.indexOf(")", start);
-					String argument = line.substring(start, end);
+					String argument = line.substring(start, end).trim();
 					ArrayList<ArgumentNoeud> argumentsInit = new ArrayList<ArgumentNoeud>();
 					
 					
@@ -184,6 +281,7 @@ public class ListeAdjacence {
 			if(solu.getNomArgument().equals(nomArg1)) {
 				argContradicteur = solu;
 			}
+			
 		}
 		
 		// On cherche l'argument cible

@@ -20,16 +20,18 @@ public class Main2 {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		//String fileName = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\file1.txt";// remplacez par le chemin et le nom du fichier à lire
+		String fileName = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\file1.txt";// remplacez par le chemin et le nom du fichier à lire
 		//String fileNameWriter = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\Newfile1.txt";// remplacez par le chemin et le nom du fichier à écrire
 		
-		String fileName = args[0]+File.separator+args[1];
+		//String fileName = args[0]+File.separator+args[1];
 		
 		System.out.println("* * * * * Représentation du graphe * * * * * ");
 		ListeAdjacence graphe = new ListeAdjacence();
-		graphe.extractArgument(args[0]);
+		graphe.lireFile(fileName);
+		graphe.extractArgument(fileName);
+		graphe.argumentExistePas(fileName, graphe.argumentList(fileName));
 		graphe.afficherGraphe();
-		graphe.extractContradiction(args[0]);
+		graphe.extractContradiction(fileName);
 		graphe.afficherGrapheAvecContradictions();
 		
 		graphe.afficherGraphe();
