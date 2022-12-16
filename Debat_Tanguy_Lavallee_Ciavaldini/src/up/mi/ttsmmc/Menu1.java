@@ -170,6 +170,7 @@ public class Menu1 {
 			try {
 				choix  = sc.nextInt();
 			}catch(InputMismatchException e) {
+				sc.nextLine();
 				System.out.println("Mauvaise saisie, veuillez réessayer.");
 			}
 			boolean estAdmissible = false;
