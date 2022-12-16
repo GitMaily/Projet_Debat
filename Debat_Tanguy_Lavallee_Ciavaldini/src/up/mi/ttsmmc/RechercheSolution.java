@@ -41,7 +41,7 @@ public class RechercheSolution{
 	public void sauvegarderLaSolution(List<List<ArgumentNoeud>> sortie, String filePath) {
 	    
 		// Créer un nouveau fichier en utilisant le chemin spécifié
-	    
+		
 		File file = new File(filePath);
 	    
 		// On regarde si le fichier existe ou pas, si il n'existe pas on en créer un

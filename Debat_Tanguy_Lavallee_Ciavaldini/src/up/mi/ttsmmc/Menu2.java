@@ -152,12 +152,27 @@ public class Menu2 {
 				break;
 			case 3:
 				if(estUtilise) {
-					System.out.println("Sauvegarde de la solution.");
-					System.out.println("Entrez le chemin du fichier : ");
 					sc.nextLine();
-					String chemin = sc.nextLine();
 					
-					recherche.sauvegarderLaSolution(sortie, chemin);
+					String chemin = "";
+					do {
+						
+						
+						System.out.println("Sauvegarde de la solution dans un fichier texte.");
+						System.out.println("Entrez le chemin du fichier : ");
+						
+						chemin = sc.nextLine();
+					
+						
+					
+						if(!chemin.contains(".txt")) {
+							System.out.println("Le programme n'accepte que les .txt\n ");	
+						}
+						else {				
+							recherche.sauvegarderLaSolution(sortie, chemin);
+						}
+					
+					}while(!chemin.contains(".txt"));
 
 				}
 				else {
