@@ -168,7 +168,7 @@ public class RechercheSolution{
 		for(List<ArgumentNoeud> ensemble : listeDesCombinaisons) {
 			SolutionSimple solution = new SolutionSimple(ensemble,graphe);
 
-			if(solution.solutionAdmissible2()) {
+			if(solution.solutionAdmissibleNew(false)) {
 				res.add(ensemble);
 			}
 		}

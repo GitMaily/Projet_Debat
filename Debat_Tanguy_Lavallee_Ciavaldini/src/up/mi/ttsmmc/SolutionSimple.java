@@ -119,15 +119,18 @@ public class SolutionSimple {
 	 * verifie si la liste des argument que contredit l'argument contradicteur contient un argument dans la liste
 	 * dans le contexte : verifie si il existeun arc entre chaque argument dans la solution
 	 * @return false si il y a une contradiction interne, sinon true
+	 * @param phase1 si c'est "true" on affiche les systeme.out.println pour avoir la charte graphique de la phase 1
 	 */
-	private boolean saCasContraInterne() {
+	private boolean saCasContraInterne(boolean phase1) {
 		for(ArgumentNoeud arg : listeSolutions) {
 			for(int i = 0;i<listeSolutions.size();i++) {
 				// Vérifie si il existe un arc entre chaque argument dans la solution
 				// Plus techniquepent, vérifie si la liste des arguments que contredit l'argument contradicteur contient un argument dans la liste
 				if(graphe.getGraphMap().get(arg).contains(listeSolutions.get(i))) {
-					System.out.println("Contradication interne, la solution n'est pas admissible.");
-					System.out.println("En effet, "+arg.getNomArgument()+" contredit "+listeSolutions.get(i).getNomArgument());
+					if(phase1) {
+						System.out.println("Contradication interne, la solution n'est pas admissible.");
+						System.out.println("En effet, "+arg.getNomArgument()+" contredit "+listeSolutions.get(i).getNomArgument());
+					}
 					return false;
 				
 				}
@@ -140,6 +143,7 @@ public class SolutionSimple {
 	 * Methode qui identifie quel argument contredit l'argument courant de la solution E en les plaçant dans une liste "cicles"
 	 * @param listeCibles Une liste cibles contenant les argument qui contredit l'argument courant dans la solution E
 	 * @param i indice de la boucle for
+	 * 
 	 */
 	private void ArgContraDansCible(ArrayList<ArgumentNoeud> listeCibles, int i) {
 		for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
@@ -156,9 +160,10 @@ public class SolutionSimple {
 	 * @param listeCibles Une liste cibles contenant les argument qui contredit l'argument courant dans la solution E
 	 * @param defended le boolean pour savoir si un défendeur a été trouvé
 	 * @param i indice de la boucle for
+	 * @param phase1 si c'est "true" on affiche les systeme.out.println pour avoir la charte graphique de la phase 1
 	 * @return false si aucun defendeur n'a été trouvé
 	 */
-	private boolean DefendUnAutreArgDansE(ArrayList<ArgumentNoeud> listeCibles, boolean defended, int i) {
+	private boolean DefendUnAutreArgDansE(ArrayList<ArgumentNoeud> listeCibles, boolean defended, int i, boolean phase1) {
 		for(ArgumentNoeud arg : listeCibles) {
 			for(int j = 0;j<listeSolutions.size();j++) {
 				//System.out.println("Identification si le contradicteur "+arg.getNomArgument()+" est contredit par "+listeSolutions.get(j).getNomArgument());
@@ -166,14 +171,19 @@ public class SolutionSimple {
 				// Vérifie si la cible courante se trouve dans les arguments contredits par l'argument de la solution E
 				if(graphe.getGraphMap().get(listeSolutions.get(j)).contains(arg)) {
 					defended = true;
-					System.out.println("Défense de "+listeSolutions.get(i).getNomArgument()+" : l'argument "+listeSolutions.get(j).getNomArgument()+" contredit l'argument "+arg.getNomArgument());
+					if(phase1) {
+						System.out.println("Défense de "+listeSolutions.get(i).getNomArgument()+" : l'argument "+listeSolutions.get(j).getNomArgument()+" contredit l'argument "+arg.getNomArgument());
+					}
 					
 					j = listeSolutions.size(); // On sort de la boucle, l'argument est déjà défendu pour le contradicteur courant.
 				}
 				
 				// On vérifie si on n'a effectivement pas trouvé de défendeur, donc non admissible
 				if(j == listeSolutions.size()-1 && defended == false) {
-					System.out.println("Aucune défense pour le contradicteur "+arg.getNomArgument());
+					if(phase1) {
+						System.out.println("Aucune défense pour le contradicteur "+arg.getNomArgument());
+					}
+					
 					
 					return false;
 				}
@@ -190,20 +200,23 @@ public class SolutionSimple {
 	 * - pour tout argument a qui contredit un élément de E, il existe un élément de E qui contredit a (E se défend contre a).
 	 * Afin de vérifier que la solution est admissible ou non ainsi que de fournir des explications,
 	 * on va vérifier 4 cas : cas ensemble vide, cas contradiction interne, cas argument non défendu dans la solution, et cas tous les arguments de la solution ne sont contredits par personne
+	 * @param phase1 si c'est "true" on affiche les systeme.out.println pour avoir la charte graphique de la phase 1
 	 * @return true si la solution est admissible, false sinon
 	 */
-	public boolean solutionAdmissibleNew() {
+	public boolean solutionAdmissibleNew(boolean phase1) {
 		
 		/* Cas ensemble vide, toujours admissible */
 		
 		if(listeSolutions.size() == 0) {
-			System.out.println("La solution E est vide.");
+			if(phase1) {
+				System.out.println("La solution E est vide.");
+			}
 			return true;
 		}
 		
 		/* Cas contradiction interne */
 	
-		if(saCasContraInterne() == false)
+		if(saCasContraInterne(phase1) == false)
 			return false;
 		
 		
@@ -233,14 +246,17 @@ public class SolutionSimple {
 						bb.append(", ");
 					}
 				}
-				System.out.println(listeSolutions.get(i).getNomArgument()+" est attaqué par les arguments "+bb.toString());
+				if(phase1) {
+					System.out.println(listeSolutions.get(i).getNomArgument()+" est attaqué par les arguments "+bb.toString());
+				}
+				
 			}
 			else {
 				personne++; // La liste est vide, aucune contradiction pour l'argument courant.
 			}
 			
 			// On identifie si l'un des arguments de la solution E défend l'argument courant de la solution E
-			if(DefendUnAutreArgDansE(listeCibles, defended, i) == false)
+			if(DefendUnAutreArgDansE(listeCibles, defended, i, phase1) == false)
 				return false;
 			
 			listeCibles.clear(); // On vide la liste pour entrer les prochains arguments qui contredisent l'argument courant
@@ -249,7 +265,9 @@ public class SolutionSimple {
 		/* Cas où les arguments de la solution ne sont contredits par personne */
 		
 		if(personne == listeSolutions.size()) {
-			System.out.println("Les arguments ne sont contredits par personne.");
+			if(phase1) {
+				System.out.println("Les arguments ne sont contredits par personne.");
+			}
 		}
 		
 		return true;
