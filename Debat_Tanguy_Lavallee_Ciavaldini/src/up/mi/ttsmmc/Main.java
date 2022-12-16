@@ -17,7 +17,7 @@ public class Main {
 		
 		/* Message d'accueil et présentation de la version */
 		
-		System.out.println("* * * * * Choisissez le menu auquelle vous souhaitez accèder * * * * *");
+		System.out.println("* * * * * Choisissez le menu auquel vous souhaitez accéder * * * * *");
 		int choix = 0;
 		
 		
@@ -43,7 +43,11 @@ public class Main {
 			Menu1.getMenu1(sc);
 			break;
 			case 2:System.out.println("Affichage du menu de la phase 2");
+			try {
 			Menu2.getMenu2(args[0],sc);
+			}catch(ArrayIndexOutOfBoundsException a){
+				System.out.println("Vous n'avez pas précisé d'argument dans la ligne de commande.\nVeuillez préciser le fichier texte à lire.");
+			}
 			break;
 			case 3:System.out.println("Fin de l'application");
 			System.exit(0);
