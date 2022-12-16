@@ -62,6 +62,7 @@ public class RechercheSolution{
 				file.createNewFile();
 			}catch(IOException e) {
 				System.err.println("Le fichier n'a pas pu être créer");
+				System.exit(0);
 			}
 		}
 		
@@ -84,6 +85,7 @@ public class RechercheSolution{
 	      writer.close();
 	    } catch (IOException e) {
 	    	System.err.println("Le fichier n'a pas pu être lu correctement");
+	    	System.exit(0);
 	    }
 	  }
 	

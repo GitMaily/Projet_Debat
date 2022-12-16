@@ -65,7 +65,9 @@ public class ListeAdjacence {
 	
 	
 	/**
-	 * methode qui permet de voir si le fichier est bien former
+	 * methode qui permet de voir si le fichier est bien former avec la nomenclature suivante :
+	 * argument(N). //N une chaine de caractère
+	 * contradiction(N,M). //M une chaine de caractère
 	 * @param pathFile le chemin du fichier
 	 */
 	public void lireFile(String pathFile) {
@@ -99,9 +101,9 @@ public class ListeAdjacence {
 	}
 	
 	/**
-	 * verifie si dans une contradiction un argument n'existe pas
+	 * verifie si dans une contradiction, un argument n'existe pas
 	 * et arrete le programme "proprement"
-	 * verifie si le nom d'un argument ne contient pas argument ou contradiction
+	 * verifie si le nom d'un argument ne contient pas "argument" ou "contradiction"
 	 * @param filePath le chemin du fichier
 	 * @param arguments la liste d'argument en string
 	 */
@@ -115,9 +117,17 @@ public class ListeAdjacence {
 					int start = line.indexOf("(");
 					int end = line.indexOf(",");
 					
+					int start2 = line.indexOf(",");
+					int end2 = line.indexOf(")");
+					
 					String argument1 = line.substring(start + 1, end).trim();
+					String argument2 = line.substring(start2 + 1, end2).trim();
 					
 					if(!(arguments.contains(argument1))) {
+						System.err.println("Le fichier est mal formé");
+						System.exit(0);
+					}
+					if(!(arguments.contains(argument2))) {
 						System.err.println("Le fichier est mal formé");
 						System.exit(0);
 					}
@@ -134,6 +144,7 @@ public class ListeAdjacence {
 			reader.close();
 		}catch (IOException e) {
 			System.err.println("Le fichier n'a pas pu être lu correctement");
+			System.exit(0);
 		}
 		
 	}
@@ -168,6 +179,7 @@ public class ListeAdjacence {
 			
 		} catch (IOException e) {
 			System.err.println("Le fichier n'a pas pu être lu correctement");
+			System.exit(0);
 		}
 		return arguments;
 	}
@@ -199,6 +211,7 @@ public class ListeAdjacence {
 			reader.close();
 		}catch (IOException e) {
 			System.err.println("Le fichier n'a pas pu être lu correctement");
+			System.exit(0);
 		}
 	}
 	
@@ -232,6 +245,7 @@ public class ListeAdjacence {
 			reader.close();
 		} catch (IOException e) {
 			System.err.println("Le fichier n'a pas pu être lu correctement");
+			System.exit(0);
 		}
 		
 	}
@@ -265,6 +279,7 @@ public class ListeAdjacence {
 		}
 		else {
 			System.out.println("L'argument n'existe pas.");
+			System.exit(0);
 		}
 	}
 	
