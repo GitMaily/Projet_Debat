@@ -133,7 +133,7 @@ public class ListeAdjacence {
 			}
 			reader.close();
 		}catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Le fichier n'a pas pu être lu correctement");
 		}
 		
 	}
@@ -157,7 +157,7 @@ public class ListeAdjacence {
 					//si le mot est présent, récupérer la chaine entre les parenthèses
 					int start = index + "argument(".length();
 					int end = line.indexOf(")", start);
-					String argument = line.substring(start, end);
+					String argument = line.substring(start, end).trim();
 					
 					
 					arguments.add(argument);
@@ -167,7 +167,7 @@ public class ListeAdjacence {
 			reader.close();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Le fichier n'a pas pu être lu correctement");
 		}
 		return arguments;
 	}
@@ -198,7 +198,7 @@ public class ListeAdjacence {
 			}
 			reader.close();
 		}catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Le fichier n'a pas pu être lu correctement");
 		}
 	}
 	
@@ -231,7 +231,7 @@ public class ListeAdjacence {
 			}
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Le fichier n'a pas pu être lu correctement");
 		}
 		
 	}

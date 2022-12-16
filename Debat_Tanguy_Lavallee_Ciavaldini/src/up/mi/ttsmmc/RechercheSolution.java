@@ -47,10 +47,10 @@ public class RechercheSolution{
 	}
 	/**
 	 * cette méthode sauvegarde la liste de solution dans un fichier
-	 * @param solution la liste de solution
+	 * @param sortie la liste de solution
 	 * @param filePath le chemin du fichier
 	 */
-	public void sauvegarderLaSolution(List<ArgumentNoeud> solution, String filePath) {
+	public void sauvegarderLaSolution(List<List<ArgumentNoeud>> sortie, String filePath) {
 	    
 		// Créer un nouveau fichier en utilisant le chemin spécifié
 	    
@@ -61,7 +61,7 @@ public class RechercheSolution{
 			try {
 				file.createNewFile();
 			}catch(IOException e) {
-				e.printStackTrace();
+				System.err.println("Le fichier n'a pas pu être créer");
 			}
 		}
 		
@@ -71,8 +71,11 @@ public class RechercheSolution{
 	      BufferedWriter bw = new BufferedWriter(writer); // création d'un tampon pour optimiser
 	      
 	      // Écrire chaque élément de la liste dans le fichier, en ajoutant un saut de ligne à la fin de chaque élément
-	      for (ArgumentNoeud item : solution) {
-	        bw.write("argument("+item.getNomArgument()+").\n");
+	      for (List<ArgumentNoeud> item : sortie) {
+	    	  for(ArgumentNoeud arg : item) {
+	    		  bw.write("argument("+arg.getNomArgument()+").\n");
+	    	  }
+	        
 	      }
 	      
 	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName() + "\n");
@@ -81,7 +84,7 @@ public class RechercheSolution{
 	      bw.close();
 	      writer.close();
 	    } catch (IOException e) {
-	      e.printStackTrace();
+	    	System.err.println("Le fichier n'a pas pu être lu correctement");
 	    }
 	  }
 	
