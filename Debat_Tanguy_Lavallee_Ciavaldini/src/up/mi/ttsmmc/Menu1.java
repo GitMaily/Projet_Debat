@@ -1,5 +1,6 @@
 package up.mi.ttsmmc;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -26,16 +27,46 @@ public class Menu1 {
 		
 		/* Réprésentation du graphe */
 		System.out.println("* * * * * Représentation du graphe * * * * * ");
-		System.out.println("Combien d'arguments possède le débat ?");
-		int nbArguments = sc.nextInt();
-		ListeAdjacence graphe = new ListeAdjacence(nbArguments);
-		graphe.afficherGraphe();
-		int choix;
+		
+		
+		
+		int nbArguments =0;
+		ListeAdjacence graphe = null;
+		
+		
+		
+		
+		do {
+			System.out.println("Combien d'arguments possède le débat ?");
+		try {
+			nbArguments =sc.nextInt();
+			graphe = new ListeAdjacence(nbArguments);
+			graphe.afficherGraphe();
+			break;
+		} catch (InputMismatchException e) {
+	        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+	        sc.next();
+		}
+		}while(true);
+		
+		
+		
+		int choix = 0 ;
 		do {
 			
 			System.out.println("(1) Ajouter une contradiction;");
 			System.out.println("(2) Fin.");
-			choix =sc.nextInt();
+			
+			
+			try {
+				
+				choix =sc.nextInt();
+			} catch (InputMismatchException e) {
+		        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+		        sc.next();
+			}
+			
+			
 			
 			switch(choix) {
 			case 1: 
@@ -69,8 +100,8 @@ public class Menu1 {
 				break;
 	
 			}
-			
-		}while((choix== 1 || choix !=2));
+		
+		}while(choix== 1 || choix !=2);
 		
 		/* L'utilisateur propose une solution potentielle E*/
 		

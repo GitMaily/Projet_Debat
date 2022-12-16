@@ -1,8 +1,7 @@
 package up.mi.ttsmmc;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -40,10 +39,10 @@ public class Menu2 {
 		
 		
 	   
-		Scanner scanner = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 	
 		RechercheSolution recherche = new RechercheSolution(graphe);
-		int choice;
+		int choix = 0;
 		List<List<ArgumentNoeud>> sortie =new ArrayList<>();//solution a afficher a la fin et dans la save qui sera actualiser a chaque affichage soit d admi soit de pref
 		List<List<ArgumentNoeud>> entree_admi=new ArrayList<>();
 		List<List<ArgumentNoeud>> entree_pref=new ArrayList<>();
@@ -61,9 +60,17 @@ public class Menu2 {
 			System.out.println("2) chercher une solution préférée");
 			System.out.println("3) sauvegarder la solution");
 			System.out.println("4) fin");
-			choice = scanner.nextInt();
+			
+			
+			try {
+				choix =sc.nextInt();
+			} catch (InputMismatchException e) {
+		        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+		        sc.next();
+			}
+			
 
-			switch (choice) {
+			switch (choix) {
 			case 1:
 				System.out.println("Vous avez choisi l'option 1 : chercher une solution admissible");
 				
@@ -133,8 +140,8 @@ public class Menu2 {
 					System.out.println("Solution a sauvegarder "+sortie.toString());
 					System.out.println("Entrez le chemin du fichier : ");
 					
-					scanner.nextLine();
-					String chemin = scanner.nextLine();
+					sc.nextLine();
+					String chemin = sc.nextLine();
 					
 					recherche.sauvegarderLaSolution(sortie, chemin);
 				}
@@ -149,8 +156,8 @@ public class Menu2 {
 			default:
 				System.out.println("Choix non valide. Veuillez choisir une option entre 1 et 4.");
 			}
-		}while(choice != 4);
-			scanner.close();
+		}while(choix != 4);
+			sc.close();
 
 	}
 }

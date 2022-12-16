@@ -1,5 +1,6 @@
 package up.mi.ttsmmc;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -10,12 +11,25 @@ public class Main {
 		/* Message d'accueil et présentation de la version */
 		
 		System.out.println("* * * * * Choisissez le menu auquelle vous souhaitez accèder * * * * *");
-		int choix;
+		int choix = 0;
+		
+		
 		
 		do {
+			
 			System.out.println("1- menu phase 1");
 			System.out.println("2- menu phase 2");
-			choix =sc.nextInt();
+			
+			
+			
+			try {
+				choix =sc.nextInt();
+			} catch (InputMismatchException e) {
+		        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+		        sc.next();
+			}
+			
+			
 			switch(choix) {
 			case 1:System.out.println("Affichage du menu de la phase 1");
 			Menu1.getMenu1();
@@ -26,8 +40,11 @@ public class Main {
 			default:System.out.println("Choisissez entre le menu de la phase 1 ou 2");
 			}
 		}while(choix!= 1 || choix !=2);
-		
+		sc.close();
 
 	}
+	
+	
+		
 
 }
