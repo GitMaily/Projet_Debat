@@ -1,5 +1,6 @@
 package up.mi.ttsmmc;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -72,30 +73,57 @@ public class Menu1 {
 			case 1: 
 				String nomArg1 = "";
 				String nomArg2 = "";
-				boolean estPossible = false;
+				boolean estPossible1 = true;
+				boolean estPossible2 = true;
+
 				do {
+					estPossible1 = false;
+					estPossible2 = false;
+
 					System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
 					nomArg1 = sc.next();
 					
 					System.out.println("Veuillez saisir le nom de l'argument contredit.");
 					nomArg2 = sc.next();
 					
-					if(nomArg1.equals(nomArg2)) {
-						System.out.println("Un argument ne peut pas se contredire soi-même. Veuillez réessayer");
-						estPossible = false;
-					}
-					ArgumentNoeud argGauche = new ArgumentNoeud(nomArg1);
-					ArgumentNoeud argDroit = new ArgumentNoeud(nomArg2);
-
-					if(graphe.getGraphMap().containsKey(argGauche) == false || graphe.getGraphMap().containsKey(argDroit) == false) {
-						System.out.println("Au moins un des arguments saisies n'existe pas.");
-						estPossible = false;
-					}
-					else {
-						estPossible = true;
+					
+					ArrayList<ArgumentNoeud> keys = new ArrayList<ArgumentNoeud>();
+					
+					for(ArgumentNoeud arg : graphe.getGraphMap().keySet()) {
+						keys.add(arg);
 					}
 					
-				}while(estPossible);
+					for(int i = 0;i<keys.size();i++) {
+						if(keys.get(i).getNomArgument().equals(nomArg1)) {
+							
+							estPossible1 = true;
+							
+							i = keys.size();
+						}
+					}
+					for(int i = 0;i<keys.size();i++) {
+						if(keys.get(i).getNomArgument().equals(nomArg2)) {
+							
+							estPossible2 = true;
+							
+							i = keys.size();
+						}
+					}
+					
+					
+					
+					
+					if(estPossible1 == false || estPossible2 == false) {
+						System.out.println("Au moins un des arguments saisies n'existe pas.\n");
+					}
+					
+					if(nomArg1.equals(nomArg2)) {
+						System.out.println("Un argument ne peut pas se contredire soi-même.");
+						estPossible1 = false;
+
+					}
+					
+				}while(nomArg1.equals(nomArg2) || estPossible1 == false || estPossible2 == false);
 				
 				graphe.ajouterContradiction(nomArg1, nomArg2);
 				graphe.afficherGrapheAvecContradictions();
@@ -129,7 +157,7 @@ public class Menu1 {
 	 */
 	public static void menuSolutions(Scanner sc, ListeAdjacence graphe) {
 		SolutionSimple E = new SolutionSimple(graphe);
-		int choix;
+		int choix = 0;
 
 		do {
 			System.out.println();
@@ -137,8 +165,12 @@ public class Menu1 {
 			System.out.println("(2) Retirer un argument;");
 			System.out.println("(3) Vérifier la solution;");
 			System.out.println("(4) Fin.");
-			choix  = sc.nextInt();
-
+			
+			try {
+				choix  = sc.nextInt();
+			}catch(InputMismatchException e) {
+				System.out.println("Mauvaise saisie, veuillez réessayer.");
+			}
 			boolean estAdmissible = false;
 			switch(choix) {
 			case 1: System.out.println("Veuillez saisir le nom de l'argument que vous souhaitez ajouter dans la solution");
