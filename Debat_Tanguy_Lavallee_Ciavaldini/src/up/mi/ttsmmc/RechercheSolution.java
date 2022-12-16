@@ -38,7 +38,7 @@ public class RechercheSolution{
 
 	}
 	/*
-	 * affiche la liste des propositions
+	 * Affiche la liste des propositions
 	 */
 	public void afficherListePropositions() {
 		for(int i =0;i<listePropositions.size();i++) {
@@ -46,7 +46,7 @@ public class RechercheSolution{
 		}
 	}
 	/**
-	 * cette méthode sauvegarde la liste de solution dans un fichier
+	 * Sauvegarde la liste de solution dans un fichier.
 	 * @param sortie la liste de solution
 	 * @param filePath le chemin du fichier
 	 */
@@ -80,7 +80,6 @@ public class RechercheSolution{
 	      
 	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName() + "\n");
 	      
-	      // Fermer l'écrivain et le tampon une fois que l'on a fini d'écrire dans le fichier
 	      bw.close();
 	      writer.close();
 	    } catch (IOException e) {
@@ -88,9 +87,10 @@ public class RechercheSolution{
 	    }
 	  }
 	
-	// Cette méthode génère toutes les combinaisons possibles sans duplicata
-    // et les ajoute à la liste des combinaisons
-	
+	/**
+	 * Génère toutes les combinaisons possibles de manière croissante. Les doublons sont supprimés.
+	 * @return la liste de toutes les combinaisons possible du graphe.
+	 */
     public List<List<ArgumentNoeud>> genererCombinaisons() {
     	
     	/**
@@ -138,73 +138,25 @@ public class RechercheSolution{
                         	dernier = false;
                         	combinaisons.add(nouvCombinaison);
                             
-                            
+
                             manqueCombinaisons = true;
                             
                             if(nouvCombinaison.size() == listeArguments.size()) {
-                            	//dernier = true;
+                            	dernier = true;
                             }
                         }
                     }
                 }
+        		supprimerDoublons(combinaisons);
+
+        		
             }
+            
         }
         
-        supprimerDoublons(combinaisons);
-
-        System.out.println("apres");
-
-        for (List<ArgumentNoeud> combination : combinaisons) {
-  		  System.out.println(combination);
-  		}
+        
         return combinaisons;
     }
-	
-	
-	public List<List<ArgumentNoeud>> combinaisons() {
-		
-		/**
-		 * Liste des arguments du graphe
-		 */
-		ArrayList<ArgumentNoeud> listeArguments = new ArrayList<ArgumentNoeud>();
-		for(ArgumentNoeud noeud : graphe.getGraphMap().keySet()) {
-			listeArguments.add(noeud);
-		}
-		
-	    List<ArgumentNoeud> args = listeArguments;
-
-	    //int count = 0;
-	    
-	    /**
-	     * On génère toutes les combinaisons possibles de la liste des arguments
-	     */
-	    List<List<ArgumentNoeud>> combs = new ArrayList<>();
-	    for (int i = 0; i < args.size(); i++) {
-	      for (int j = i + 1; j <= args.size(); j++) {
-	        List<ArgumentNoeud> subList = args.subList(i, j);
-	        combs.add(subList);
-	        
-	      }
-	      /*if(i != 0) {
-	  	      for (int k = 0; k < count ; k++) {
-	  	    	  args.get(k);
-	  	    	List<ArgumentNoeud> subList2 = args.subList(k, count);
-		        combs.add(subList2);
-	  	      }
-          }*/
-	    }
-
-	    // Affichage des combinaisons
-	    for (List<ArgumentNoeud> c : combs) {
-	      System.out.println(c);
-	    }
-	  return combs;
-	}
-	
-	
-	
-	
-	
 	
 	public List<List<ArgumentNoeud>> calculerSolutionsAdmissibles(){
 		List<List<ArgumentNoeud>> listeDesCombinaisons = genererCombinaisons();
@@ -219,59 +171,52 @@ public class RechercheSolution{
 			}
 		}
 		
-		
-		List<List<ArgumentNoeud>> ensemblesASupprimer = new ArrayList<>();
-
-		
-		boolean duplicata = false;
-		//for(List<ArgumentNoeud> admissible : res) {
-			
-		
-		supprimerDoublons(res);
-		
-		/*for(int i = 0;i<res.size();i++) {
-				for(int j = 0;j<res.size();j++) {
-					if((res.get(i).size()!= 0) && (res.get(j).size() != 0) && res.get(i).size() == res.get(j).size()) {
-
-						if(!res.get(i).equals(res.get(j))) {
-							if(res.get(i).containsAll(res.get(j))) {
-								duplicata = true;
-								//ensemblesASupprimer.add(res.get(i));
-								res.remove(j);
-						}
-						
-						
-					}
-				}
-			}
-		}*/
-		
-		
 		return res;
 		
 		
 	}
 	
+	public List<List<ArgumentNoeud>>  calculerSolutionsPreferees (List<List<ArgumentNoeud>> solutionsAdmissibles) {
+
+        List<List<ArgumentNoeud>> sol_pref = new ArrayList<>();
+        
+        
+        for( int i=0;i<solutionsAdmissibles.size();i++) {
+            
+            List<ArgumentNoeud> element = solutionsAdmissibles.get(i);
+            
+            boolean est_contenu = true;
+            
+            for( int j=0;j<solutionsAdmissibles.size();j++) {
+                if(j!=i) {
+                    if(solutionsAdmissibles.get(j).containsAll(element)) {
+                        est_contenu=false;
+                    }
+                }
+            }
+            
+            if(est_contenu==true) {
+                sol_pref.add(element);
+            }
+    
+        }
+        
+    return sol_pref;  
+    
+	}
+	
 	
 	private List<List<ArgumentNoeud>> supprimerDoublons(List<List<ArgumentNoeud>> listeDeListes){
 		
-		List<Integer> indiceDesEnsemblesASupprimer = new ArrayList<Integer>();
 
-		
-		for(int i = 0;i<listeDeListes.size();i++) {
-			System.out.println(listeDeListes.size());
-			System.out.println("index"+i);
+		for(int i = 0;i<listeDeListes.size()-1;i++) {
 			for(int j = 0;j<listeDeListes.size();j++) {
 				if((listeDeListes.get(i).size()!= 0) && (listeDeListes.get(j).size() != 0) && (listeDeListes.get(i).size() == listeDeListes.get(j).size())) {
 
 					if(!listeDeListes.get(i).equals(listeDeListes.get(j))) {
 						if(listeDeListes.get(i).containsAll(listeDeListes.get(j))) {
-							//duplicata = true;
-							//ensemblesASupprimer.add(res.get(i));
-							//indiceDesEnsemblesASupprimer.add(j);
 							listeDeListes.remove(j);
-					}
-					
+						}
 					
 					}
 				}

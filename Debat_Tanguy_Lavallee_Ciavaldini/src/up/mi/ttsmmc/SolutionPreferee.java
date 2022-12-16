@@ -3,9 +3,9 @@ package up.mi.ttsmmc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Solution_pref {
+public class SolutionPreferee {
 
-	public List<List<ArgumentNoeud>>  getSolPref (List<List<ArgumentNoeud>> sol_admi) {
+	public List<List<ArgumentNoeud>>  calculerSolutionsPreferees (List<List<ArgumentNoeud>> sol_admi) {
 
         List<List<ArgumentNoeud>> sol_pref = new ArrayList<>();
         
@@ -18,6 +18,7 @@ public class Solution_pref {
             List<ArgumentNoeud> element = sol_admi.get(i);
             
             boolean est_contenu = true;
+            
             for( int j=0;j<sol_admi.size();j++) {
                 if(j!=i) {
                     if(sol_admi.get(j).containsAll(element)) {
@@ -25,12 +26,14 @@ public class Solution_pref {
                     }
                 }
             }
+            
             if(est_contenu==true) {
                 sol_pref.add(element);
             }
     
+        }
         
-    }
     return sol_pref;  
+    
 	}
 }

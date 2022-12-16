@@ -415,6 +415,7 @@ public class SolutionSimple {
 			
 			// On identifie si l'un des arguments de la solution E défend l'argument courant de la solution E
 			for(ArgumentNoeud arg : listeCibles) {
+				defended = false;
 				for(int j = 0;j<listeSolutions.size();j++) {
 					// Vérifie si la cible courante se trouve dans les arguments contredits par l'argument de la solution E
 					if(graphe.getGraphMap().get(listeSolutions.get(j)).contains(arg)) {

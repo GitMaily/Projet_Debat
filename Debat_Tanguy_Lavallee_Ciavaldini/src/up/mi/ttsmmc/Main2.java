@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Menu2 {
+public class Main2 {
 	
 	
 
@@ -24,14 +24,14 @@ public class Menu2 {
 		//String fileName = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\file1.txt";// remplacez par le chemin et le nom du fichier à lire
 		//String fileNameWriter = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\Newfile1.txt";// remplacez par le chemin et le nom du fichier à écrire
 		
-		String fileName = args[0]+File.separator+args[1];
+		String cheminFichier = args[0];
 		 
 		
 		//System.out.println("* * * * * Représentation du graphe * * * * * ");
 		ListeAdjacence graphe = new ListeAdjacence();
-		graphe.extractArgument(args[0]);
+		graphe.extractArgument(cheminFichier);
 		graphe.afficherGraphe();
-		graphe.extractContradiction(args[0]);
+		graphe.extractContradiction(cheminFichier);
 		graphe.afficherGrapheAvecContradictions();
 		
 		graphe.afficherGraphe();
@@ -44,7 +44,13 @@ public class Menu2 {
 		int choice;
 		List<List<ArgumentNoeud>> sortie =new ArrayList<>();//solution a afficher a la fin et dans la save qui sera actualiser a chaque affichage soit d admi soit de pref
 		List<List<ArgumentNoeud>> entree_admi=new ArrayList<>();
+		List<List<ArgumentNoeud>> entree_pref=new ArrayList<>();
 		
+		Random random = new Random();
+		List<List<ArgumentNoeud>> randomAdmissible = new ArrayList<>();
+		List<List<ArgumentNoeud>> randomPreferee = new ArrayList<>();
+		int indexSolution = 0;
+
 		boolean estUtilise = false;
 		
 		do {
@@ -59,48 +65,64 @@ public class Menu2 {
 			case 1:
 				System.out.println("Vous avez choisi l'option 1 : chercher une solution admissible");
 				
-				RechercheSolution sol_admi = new RechercheSolution(graphe);
-				entree_admi = sol_admi.calculerSolutionsAdmissibles();
+				if(entree_admi.isEmpty()) {
+					//RechercheSolution solutionAdmissible = new RechercheSolution(graphe);
+					entree_admi = recherche.calculerSolutionsAdmissibles();
+				}
 				
-				Random random = new Random();
-
-			    // Générez un index au hasard dans la plage des index de la liste
-			    int index = random.nextInt(entree_admi.size());
-
-			    // Récupérez l'élément à l'index généré au hasard
-			    List<ArgumentNoeud> element = entree_admi.get(index);
-
-			    // Affichez l'élément
-			    System.out.println(element);
-
+				/**
+				 * Sélection aléatoire grâce au tirage sans remise
+				 */
 				
+				 // Si la liste est vide, on la remplit à nouveau avec la liste complète des solutions admissibles ou préférées
+		        if (randomAdmissible.isEmpty()) {
+		        	
+		        	randomAdmissible.addAll(entree_admi);
+		        }
+		        
+		        indexSolution = random.nextInt(randomAdmissible.size());
+		        List<ArgumentNoeud> solutionAdmissible = randomAdmissible.get(indexSolution);
+		        randomAdmissible.remove(indexSolution);
 				
-					sortie.clear();
-					sortie.add(element);
-					/*for(List<ArgumentNoeud> argu : entree_admi) {
-						sortie.add(argu);
-						}*/
-				
+			    System.out.println(solutionAdmissible);
+
+				sortie.clear();
+				sortie.add(solutionAdmissible);
 				estUtilise = true;
-				
 				
 				break;
 			case 2:
 				System.out.println("Vous avez choisi l'option 2 : chercher une solution préférée");
 				
-				List<List<ArgumentNoeud>> entree_pref=new ArrayList<>();
-				Solution_pref sp = new Solution_pref();
-				entree_pref= sp.getSolPref(entree_admi);
 				
-				System.out.println(entree_pref);
+				if(entree_admi.isEmpty()) {
+					entree_admi = recherche.calculerSolutionsAdmissibles();
+
+				}
+				if(entree_pref.isEmpty()) {
+					//SolutionPreferee sp = new SolutionPreferee();
+					entree_pref= recherche.calculerSolutionsPreferees(entree_admi);
+				}
+				/**
+				 * Sélection aléatoire grâce au tirage sans remise
+				 */
 				
+				 // Si la liste est vide, on la remplit à nouveau avec la liste complète des solutions admissibles ou préférées
+		        if (randomPreferee.isEmpty()) {
+		        	
+		        	randomPreferee.addAll(entree_pref);
+		        }
+		        
+		        indexSolution = random.nextInt(randomPreferee.size());
+		        List<ArgumentNoeud> solutionPreferee = randomPreferee.get(indexSolution);
+		        randomPreferee.remove(indexSolution);
 				
-					sortie.clear();
-					for(List<ArgumentNoeud> argu : entree_pref) {
-						sortie.add(argu);
-						}
+			    System.out.println(solutionPreferee);
 				
-					estUtilise = true;
+				sortie.clear();
+				sortie.add(solutionPreferee);
+			
+				estUtilise = true;
 					
 				break;
 			case 3:
@@ -108,10 +130,11 @@ public class Menu2 {
 					System.out.println("Vous avez choisi l'option 3 : sauvegarder la solution");
 					System.out.println("Solution a sauvegarder "+sortie.toString());
 					System.out.println("Entrez le chemin du fichier : ");
-					Scanner scanner2 = new Scanner(System.in);
-					String lien = scanner2.nextLine();
-					recherche.sauvegarderLaSolution(sortie, lien);
-					scanner2.close();
+					
+					scanner.nextLine();
+					String chemin = scanner.nextLine();
+					
+					recherche.sauvegarderLaSolution(sortie, chemin);
 				}
 				else {
 					System.out.println("Il faut choisir l'option 1 ou 2 avant\n");
@@ -126,27 +149,6 @@ public class Menu2 {
 			}
 		}while(choice != 4);
 			scanner.close();
-		
-		
-		
-		
-		//List<List<ArgumentNoeud>> ensemblesPossibles;
 
-		
-		//ensemblesPossibles = recherche.genererCombinaisons();
-		//System.out.print(ensemblesPossibles);
-		
-		//System.out.println("Voici les ensembles admissibles qu'on devra proposer un par un : \n"+recherche.calculerSolutionsAdmissibles());
-		
-		
-		
-		
-		
-		/*List<List<ArgumentNoeud>> listeComb2 = recherche.combinaisons();
-		System.out.println(listeComb2);
-		ensemblesPossibles = recherche.calculerSolutionsAdmissibles2();
-		
-		System.out.println("Voici les ensembles admissibles qu'on devra proposer un par un : \n"+ensemblesPossibles.toString());
-		*/
 	}
 }

@@ -94,8 +94,8 @@ public class Menu2 {
 				System.out.println("Vous avez choisi l'option 2 : chercher une solution préférée");
 				
 				List<List<ArgumentNoeud>> entree_pref=new ArrayList<>();
-				Solution_pref sp = new Solution_pref();
-				entree_pref= sp.getSolPref(entree_admi);
+				SolutionPreferee sp = new SolutionPreferee();
+				entree_pref= sp.calculerSolutionsPreferees(entree_admi);
 				
 				System.out.println(entree_pref);
 				
