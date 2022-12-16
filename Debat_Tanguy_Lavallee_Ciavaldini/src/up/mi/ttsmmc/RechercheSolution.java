@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * cette classe sert a rechercher les solution admissible et préféré ainsi que de sauvegarder
@@ -20,31 +17,22 @@ import java.util.Map;
  */
 public class RechercheSolution{
 	
-	HashMap<ArgumentNoeud,ArrayList<ArrayList<ArgumentNoeud>>> ensemblesPossibles;
 	
-	//variable
+	/**
+	 * Représente le graphe orienté du débat.
+	 */
 	private ListeAdjacence graphe;
-	private ArrayList<ArgumentNoeud> proposition;
-	private List<ArrayList<ArgumentNoeud>> listePropositions;
 	
-	//constructeur
+	
+	/**
+	 * Permet de créer une recherche de solution, selon un schéma de débat.
+	 * @param graphe le graphe du débat
+	 */
 	public RechercheSolution(ListeAdjacence graphe) {
 		this.graphe = graphe;
-		ensemblesPossibles = new HashMap<ArgumentNoeud,ArrayList<ArrayList<ArgumentNoeud>>>();
-		
-		
-		proposition = new ArrayList<ArgumentNoeud>();
-		listePropositions = new ArrayList<ArrayList<ArgumentNoeud>>();
 
 	}
-	/*
-	 * Affiche la liste des propositions
-	 */
-	public void afficherListePropositions() {
-		for(int i =0;i<listePropositions.size();i++) {
-			listePropositions.get(i).toString();
-		}
-	}
+	
 	/**
 	 * Sauvegarde la liste de solution dans un fichier.
 	 * @param sortie la liste de solution
@@ -79,7 +67,7 @@ public class RechercheSolution{
 	        
 	      }
 	      
-	      System.out.println("La liste de solution à bien été écrit dans le fichier : " + file.getName() + "\n");
+	      System.out.println("La solution "+sortie.toString()+" a bien été sauvegardée dans le fichier : " + file.getName() + "\n");
 	      
 	      bw.close();
 	      writer.close();
@@ -168,7 +156,7 @@ public class RechercheSolution{
 		for(List<ArgumentNoeud> ensemble : listeDesCombinaisons) {
 			SolutionSimple solution = new SolutionSimple(ensemble,graphe);
 
-			if(solution.solutionAdmissibleNew(false)) {
+			if(solution.solutionAdmissible(false)) {
 				res.add(ensemble);
 			}
 		}

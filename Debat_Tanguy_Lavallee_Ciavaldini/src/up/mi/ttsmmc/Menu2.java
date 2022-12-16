@@ -6,42 +6,59 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Correspond au menu de la phase 2 du projet.
+ * @author Thomas_Tanguy
+ * @author Samuel_Lavallée
+ * @author Maily_Ciavaldini
+ * @version PHASE_2
+ */
 public class Menu2 {
 	
-	
-
 	/**
-	 * Ce programme permet de résoudre un débat.
-	 * @author Thomas_Tanguy
-	 * @author Samuel_Lavallée
-	 * @author Maily_Ciavaldini
-	 * @version PHASE_2
-	 * @throws Exception 
+	 * Lis un fichier texte et insère les données dans un graphe.
+	 * @param graphe le graphe du débat
+	 * @param cheminFichier le chemin du fichier texte
+	 * @throws Exception une erreur de fichier se produit si le chemin du fichier n'existe pas. Le programme s'arrête avec un message pour avertir l'utilisateur.
 	 */
-	public static void getMenu2(String args, Scanner sc) throws Exception {
-		
-		
-		String cheminFichier = args;
-		 
-		
-		//System.out.println("* * * * * Représentation du graphe * * * * * ");
-		ListeAdjacence graphe = new ListeAdjacence();
+	public static void lectureDeFichier(ListeAdjacence graphe, String cheminFichier) throws Exception {
 		graphe.lireFile(cheminFichier);
 		graphe.extractArgument(cheminFichier);
 		graphe.argumentExistePas(cheminFichier, graphe.argumentList(cheminFichier));
 		graphe.afficherGraphe();
+		System.out.println();
 		graphe.extractContradiction(cheminFichier);
 		graphe.afficherGrapheAvecContradictions();
 		
-		graphe.afficherGraphe();
+	}
+
+	/**
+	 * Appel au menu 2 du programme.
+	 * @param args Le chemin du fichier que l'on veut lire
+	 * @param sc le scanner unique
+	 * @throws Exception une erreur de fichier se produit si le chemin du fichier n'existe pas. Le programme s'arrête avec un message pour avertir l'utilisateur.
+	 */
+	public static void getMenu2(String args, Scanner sc) throws Exception {
 		
+		/* Message d'accueil et présentation de la version */
 		
-	   
-		//Scanner sc = new Scanner(System.in);
+		System.out.println("* * * * * Programme de résolution de débat (version PHASE_2) * * * * *");
+		System.out.println("Ce menu permet de :");
+		System.out.println("1) Utiliser un fichier pour représenter un graphe de débat. Possibilité de lire, et sauvegarder.");
+		System.out.println("2) La recherche d'une solution admissible, ou préférée.");
+		System.out.println();
+		
+		String cheminFichier = args;
+		 
+		
+		ListeAdjacence graphe = new ListeAdjacence();
+		
+		lectureDeFichier(graphe, cheminFichier);
+		
 	
 		RechercheSolution recherche = new RechercheSolution(graphe);
 		int choix = 0;
-		List<List<ArgumentNoeud>> sortie =new ArrayList<>();//solution a afficher a la fin et dans la save qui sera actualiser a chaque affichage soit d admi soit de pref
+		List<List<ArgumentNoeud>> sortie =new ArrayList<>();
 		List<List<ArgumentNoeud>> entree_admi=new ArrayList<>();
 		List<List<ArgumentNoeud>> entree_pref=new ArrayList<>();
 		
@@ -54,23 +71,23 @@ public class Menu2 {
 		
 		do {
 		
-			System.out.println("1) chercher une solution admissible");
-			System.out.println("2) chercher une solution préférée");
-			System.out.println("3) sauvegarder la solution");
-			System.out.println("4) fin");
+			System.out.println("(1) Chercher une solution admissible");
+			System.out.println("(2) Chercher une solution préférée");
+			System.out.println("(3) Sauvegarder la solution");
+			System.out.println("(4) Fin");
 			
 			
 			try {
 				choix =sc.nextInt();
 			} catch (InputMismatchException e) {
-		        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+		        System.out.println("La saisie n'est pas correcte, veuillez réessayer.\n");
 		        sc.next();
 			}
 			
 
 			switch (choix) {
 			case 1:
-				System.out.println("Vous avez choisi l'option 1 : chercher une solution admissible");
+				System.out.println("Le programme va maintenant vous proposer une solution admissible.");
 				
 				if(entree_admi.isEmpty()) {
 					entree_admi = recherche.calculerSolutionsAdmissibles();
@@ -89,6 +106,8 @@ public class Menu2 {
 		        indexSolution = random.nextInt(randomAdmissible.size());
 		        List<ArgumentNoeud> solutionAdmissible = randomAdmissible.get(indexSolution);
 		        randomAdmissible.remove(indexSolution);
+		        
+		        System.out.println("Voici une solution admissible du débat :");
 		        afficherSolution(solutionAdmissible);
 
 				sortie.clear();
@@ -97,7 +116,7 @@ public class Menu2 {
 				
 				break;
 			case 2:
-				System.out.println("Vous avez choisi l'option 2 : chercher une solution préférée");
+				System.out.println("Le programme va maintenant vous proposer une solution préférée.");
 				
 				
 				if(entree_admi.isEmpty()) {
@@ -105,9 +124,9 @@ public class Menu2 {
 
 				}
 				if(entree_pref.isEmpty()) {
-					//SolutionPreferee sp = new SolutionPreferee();
 					entree_pref= recherche.calculerSolutionsPreferees(entree_admi);
 				}
+				
 				/**
 				 * Sélection aléatoire grâce au tirage sans remise
 				 */
@@ -121,7 +140,8 @@ public class Menu2 {
 		        indexSolution = random.nextInt(randomPreferee.size());
 		        List<ArgumentNoeud> solutionPreferee = randomPreferee.get(indexSolution);
 		        randomPreferee.remove(indexSolution);
-				
+		        
+		        System.out.println("Voici une solution préférée du débat :");
 		        afficherSolution(solutionPreferee);
 				
 				sortie.clear();
@@ -132,31 +152,33 @@ public class Menu2 {
 				break;
 			case 3:
 				if(estUtilise) {
-					System.out.println("Vous avez choisi l'option 3 : sauvegarder la solution");
-					System.out.println("Solution a sauvegarder "+sortie.toString());
+					System.out.println("Sauvegarde de la solution.");
 					System.out.println("Entrez le chemin du fichier : ");
-					
 					sc.nextLine();
 					String chemin = sc.nextLine();
 					
 					recherche.sauvegarderLaSolution(sortie, chemin);
+
 				}
 				else {
-					System.out.println("Il faut choisir l'option 1 ou 2 avant\n");
+					System.out.println("Il faut choisir l'option 1 ou 2 avant.\n");
 				}
 				break;
 				
 			case 4:
-				System.out.println("Vous avez choisi l'option 4 : fin");
+				System.out.println("Fin du programme.");
 				break;
 			default:
 				System.out.println("Choix non valide. Veuillez choisir une option entre 1 et 4.");
 			}
 		}while(choix != 4);
-			//sc.close();
 
 	}
 	
+	/**
+	 * Affiche la solution proposée à l'utilisateur.
+	 * @param solutionArguments une solution d'arguments
+	 */
 	private static void afficherSolution(List<ArgumentNoeud> solutionArguments) {
         StringBuffer sb = new StringBuffer();
         for(int i = 0;i<solutionArguments.size();i++){

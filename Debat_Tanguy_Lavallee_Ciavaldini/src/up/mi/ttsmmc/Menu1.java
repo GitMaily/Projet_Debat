@@ -9,19 +9,20 @@ import java.util.Scanner;
  * @author Thomas_Tanguy
  * @author Samuel_Lavallée
  * @author Maily_Ciavaldini
- * @version PHASE_1
+ * @version PHASE_2
  */
 public class Menu1 {
-
+	
+	/**
+	 * Appel au menu 1 du programme.
+	 * @param sc le scanner unique
+	 */
 	public static void getMenu1(Scanner sc) {
-		
-		
-		//Scanner sc = new Scanner(System.in);
 		
 		/* Message d'accueil et présentation de la version */
 		
-		System.out.println("* * * * * Programme de résolution de débat (version PHASE_1) * * * * *");
-		System.out.println("La version actuelle de ce programme permet de :");
+		System.out.println("* * * * * Programme de résolution de débat (version PHASE_2) * * * * *");
+		System.out.println("Ce menu permet de :");
 		System.out.println("1) Représenter les arguments et les contradictions entre eux;");
 		System.out.println("2) Vérifier si un ensemble d'arguments est une solution admissible ou non, avec des explications.");
 		System.out.println();
@@ -45,7 +46,7 @@ public class Menu1 {
 			graphe.afficherGraphe();
 			break;
 		} catch (InputMismatchException e) {
-	        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+	        System.out.println("La saisie n'est pas correcte, veuillez réessayer.\n");
 	        sc.next();
 		}
 		}while(true);
@@ -63,7 +64,7 @@ public class Menu1 {
 				
 				choix =sc.nextInt();
 			} catch (InputMismatchException e) {
-		        System.out.println("La valeur entrée n'est pas un entier. Veuillez réessayer.\n");
+		        System.out.println("La saisie n'est pas correcte, veuillez réessayer.\n");
 		        sc.next();
 			}
 			
@@ -79,7 +80,7 @@ public class Menu1 {
 				do {
 					estPossible1 = false;
 					estPossible2 = false;
-
+					
 					System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
 					nomArg1 = sc.next();
 					
@@ -191,7 +192,7 @@ public class Menu1 {
 					break;
 					
 			case 3: System.out.println("/!\\ Vérification de la solution /!\\");
-					estAdmissible = E.solutionAdmissibleNew();
+					estAdmissible = E.solutionAdmissible(true);
 					System.out.println();
 					if(estAdmissible) {
 						System.out.println("La solution est donc admissible.");
@@ -206,7 +207,7 @@ public class Menu1 {
 					
 			case 4: E.afficherSolution();
 					System.out.println();
-					estAdmissible = E.solutionAdmissible2();
+					estAdmissible = E.solutionAdmissible(false);
 					if(estAdmissible) {
 						System.out.println("La solution est admissible.");
 					}

@@ -3,6 +3,13 @@ package up.mi.ttsmmc;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Correspond au menu principal de notre programme de résolution de débat.
+ * @author Thomas_Tanguy
+ * @author Samuel_Lavallée
+ * @author Maily_Ciavaldini
+ * @version PHASE_2
+ */
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -17,8 +24,8 @@ public class Main {
 		
 		do {
 			
-			System.out.println("(1) menu phase 1");
-			System.out.println("(2) menu phase 2");
+			System.out.println("(1) Menu phase 1 : créer un débat manuellement.");
+			System.out.println("(2) Menu phase 2 : générer un débat depuis un fichier texte, et chercher des solutions admissibles ou préférées.");
 			System.out.println("(3) Quitter");
 
 			
