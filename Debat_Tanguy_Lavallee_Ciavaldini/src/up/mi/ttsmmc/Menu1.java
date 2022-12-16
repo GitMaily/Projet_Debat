@@ -12,10 +12,10 @@ import java.util.Scanner;
  */
 public class Menu1 {
 
-	public static void getMenu1() {
+	public static void getMenu1(Scanner sc) {
 		
 		
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
 		
 		/* Message d'accueil et présentation de la version */
 		
@@ -72,7 +72,7 @@ public class Menu1 {
 			case 1: 
 				String nomArg1 = "";
 				String nomArg2 = "";
-				
+				boolean estPossible = true;
 				do {
 					System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
 					nomArg1 = sc.next();
@@ -82,9 +82,17 @@ public class Menu1 {
 					
 					if(nomArg1.equals(nomArg2)) {
 						System.out.println("Un argument ne peut pas se contredire soi-même. Veuillez réessayer");
+						estPossible = false;
 					}
+					ArgumentNoeud argGauche = new ArgumentNoeud(nomArg1);
+					ArgumentNoeud argDroit = new ArgumentNoeud(nomArg2);
+
+						if(!graphe.getGraphMap().containsKey(argGauche) || !graphe.getGraphMap().containsKey(argDroit)) {
+							System.out.println("Au moins un des arguments saisies n'existe pas.");
+							estPossible = false;
+						}
 					
-				}while(nomArg1.equals(nomArg2));
+				}while(!estPossible);
 				
 				graphe.ajouterContradiction(nomArg1, nomArg2);
 				graphe.afficherGrapheAvecContradictions();
@@ -107,7 +115,7 @@ public class Menu1 {
 		
 		menuSolutions(sc, graphe);
 		
-		sc.close();
+		//sc.close();
 		
 	}
 	

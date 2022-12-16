@@ -17,9 +17,10 @@ public class Main {
 		
 		do {
 			
-			System.out.println("1- menu phase 1");
-			System.out.println("2- menu phase 2");
-			
+			System.out.println("(1) menu phase 1");
+			System.out.println("(2) menu phase 2");
+			System.out.println("(3) Quitter");
+
 			
 			
 			try {
@@ -32,14 +33,17 @@ public class Main {
 			
 			switch(choix) {
 			case 1:System.out.println("Affichage du menu de la phase 1");
-			Menu1.getMenu1();
+			Menu1.getMenu1(sc);
 			break;
 			case 2:System.out.println("Affichage du menu de la phase 2");
-			Menu2.getMenu2(args[0]);
+			Menu2.getMenu2(args[0],sc);
+			break;
+			case 3:System.out.println("Fin de l'application");
+			System.exit(0);
 			break;
 			default:System.out.println("Choisissez entre le menu de la phase 1 ou 2");
 			}
-		}while(choix!= 1 || choix !=2);
+		}while(choix > 3 || choix < 1);
 		sc.close();
 
 	}

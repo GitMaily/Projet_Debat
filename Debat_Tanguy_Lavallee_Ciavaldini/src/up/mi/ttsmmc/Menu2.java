@@ -18,7 +18,7 @@ public class Menu2 {
 	 * @version PHASE_2
 	 * @throws Exception 
 	 */
-	public static void getMenu2(String args) throws Exception {
+	public static void getMenu2(String args, Scanner sc) throws Exception {
 		
 		
 		String cheminFichier = args;
@@ -37,7 +37,7 @@ public class Menu2 {
 		
 		
 	   
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
 	
 		RechercheSolution recherche = new RechercheSolution(graphe);
 		int choix = 0;
@@ -153,7 +153,7 @@ public class Menu2 {
 				System.out.println("Choix non valide. Veuillez choisir une option entre 1 et 4.");
 			}
 		}while(choix != 4);
-			sc.close();
+			//sc.close();
 
 	}
 	
