@@ -72,7 +72,7 @@ public class Menu1 {
 			case 1: 
 				String nomArg1 = "";
 				String nomArg2 = "";
-				boolean estPossible = true;
+				boolean estPossible = false;
 				do {
 					System.out.println("Veuillez saisir le nom de l'argument contradicteur.");
 					nomArg1 = sc.next();
@@ -87,12 +87,15 @@ public class Menu1 {
 					ArgumentNoeud argGauche = new ArgumentNoeud(nomArg1);
 					ArgumentNoeud argDroit = new ArgumentNoeud(nomArg2);
 
-						if(!graphe.getGraphMap().containsKey(argGauche) || !graphe.getGraphMap().containsKey(argDroit)) {
-							System.out.println("Au moins un des arguments saisies n'existe pas.");
-							estPossible = false;
-						}
+					if(graphe.getGraphMap().containsKey(argGauche) == false || graphe.getGraphMap().containsKey(argDroit) == false) {
+						System.out.println("Au moins un des arguments saisies n'existe pas.");
+						estPossible = false;
+					}
+					else {
+						estPossible = true;
+					}
 					
-				}while(!estPossible);
+				}while(estPossible);
 				
 				graphe.ajouterContradiction(nomArg1, nomArg2);
 				graphe.afficherGrapheAvecContradictions();
