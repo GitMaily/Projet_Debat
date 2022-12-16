@@ -1,4 +1,0 @@
-argument(A1).
-argument(A3).
-argument(A8).
-argument(A9).

@@ -20,8 +20,6 @@ public class Menu2 {
 	 */
 	public static void getMenu2(String args) throws Exception {
 		
-		//String cheminFichier = "C:\\Users\\samue\\Documents\\COURS\\Projet Debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\file1.txt";// remplacez par le chemin et le nom du fichier à lire
-		//String fileNameWriter = "E:\\user\\Documents\\Documents descartes L3\\COURS\\POOA\\Projet debat\\pooa\\Debat_Tanguy_Lavallee_Ciavaldini\\src\\Newfile1.txt";// remplacez par le chemin et le nom du fichier à écrire
 		
 		String cheminFichier = args;
 		 
@@ -75,7 +73,6 @@ public class Menu2 {
 				System.out.println("Vous avez choisi l'option 1 : chercher une solution admissible");
 				
 				if(entree_admi.isEmpty()) {
-					//RechercheSolution solutionAdmissible = new RechercheSolution(graphe);
 					entree_admi = recherche.calculerSolutionsAdmissibles();
 				}
 				
@@ -92,8 +89,7 @@ public class Menu2 {
 		        indexSolution = random.nextInt(randomAdmissible.size());
 		        List<ArgumentNoeud> solutionAdmissible = randomAdmissible.get(indexSolution);
 		        randomAdmissible.remove(indexSolution);
-				
-			    System.out.println(solutionAdmissible);
+		        afficherSolution(solutionAdmissible);
 
 				sortie.clear();
 				sortie.add(solutionAdmissible);
@@ -126,7 +122,7 @@ public class Menu2 {
 		        List<ArgumentNoeud> solutionPreferee = randomPreferee.get(indexSolution);
 		        randomPreferee.remove(indexSolution);
 				
-			    System.out.println(solutionPreferee);
+		        afficherSolution(solutionPreferee);
 				
 				sortie.clear();
 				sortie.add(solutionPreferee);
@@ -160,4 +156,19 @@ public class Menu2 {
 			sc.close();
 
 	}
+	
+	private static void afficherSolution(List<ArgumentNoeud> solutionArguments) {
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0;i<solutionArguments.size();i++){
+            sb.append(solutionArguments.get(i).getNomArgument());
+            if(i < solutionArguments.size()-1) {
+                sb.append(",");
+            }
+            
+        }
+        sb.append("\n");
+        
+        System.out.println(sb.toString());
+    }
+	
 }

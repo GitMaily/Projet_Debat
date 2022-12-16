@@ -110,7 +110,7 @@ public class RechercheSolution{
     	 */
     	combinaisons.add(new ArrayList<>());
     	
-        // Commencer par ajouter tous les objets individuellement à la liste des combinaisons
+        // Ajouter tous les objets individuellement à la liste des combinaisons
         for (ArgumentNoeud arg : listeArguments) {
             List<ArgumentNoeud> combination = new ArrayList<>();
             combination.add(arg);
@@ -123,11 +123,9 @@ public class RechercheSolution{
         while (manqueCombinaisons) {
             manqueCombinaisons = false;
 
-            // Pour chaque combinaison existante...
             for (int i = 0; i < combinaisons.size(); i++) {
                 List<ArgumentNoeud> uneCombinaison = combinaisons.get(i);
 
-                // ...ajouter tous les objets qui ne sont pas déjà dans la combinaison...
                 for (ArgumentNoeud arg : listeArguments) {
                 	
                     if (!uneCombinaison.contains(arg)) {
@@ -135,11 +133,9 @@ public class RechercheSolution{
                         nouvCombinaison.add(arg);
                         
 
-                        // ...mais seulement si la nouvelle combinaison n'existe pas déjà
                         if (!combinaisons.contains(nouvCombinaison) && dernier == false) {
                         	dernier = false;
                         	combinaisons.add(nouvCombinaison);
-                            
 
                             manqueCombinaisons = true;
                             
@@ -160,6 +156,10 @@ public class RechercheSolution{
         return combinaisons;
     }
 	
+    /**
+     * Calcule toutes les solutions admissibles possibles du graphe représenté.
+     * @return L'ensemble de toutes les solutions admissibles possibles
+     */
 	public List<List<ArgumentNoeud>> calculerSolutionsAdmissibles(){
 		List<List<ArgumentNoeud>> listeDesCombinaisons = genererCombinaisons();
 		
@@ -178,6 +178,10 @@ public class RechercheSolution{
 		
 	}
 	
+	 /**
+     * Calcule toutes les solutions préférées possibles du graphe représenté.
+     * @return L'ensemble de toutes les solutions préférées possibles
+     */
 	public List<List<ArgumentNoeud>>  calculerSolutionsPreferees (List<List<ArgumentNoeud>> solutionsAdmissibles) {
 
         List<List<ArgumentNoeud>> sol_pref = new ArrayList<>();
@@ -207,7 +211,11 @@ public class RechercheSolution{
     
 	}
 	
-	
+	/**
+	 * Supprime tous les doublons d'un ensemble de liste, de sorte que chaque combinaison de liste soit unique.
+	 * @param listeDeListes un ensemble de liste
+	 * @return un ensemble de liste d'arguments
+	 */
 	private List<List<ArgumentNoeud>> supprimerDoublons(List<List<ArgumentNoeud>> listeDeListes){
 		
 
@@ -227,7 +235,5 @@ public class RechercheSolution{
 		
 		return listeDeListes;
 	}
-	
-	
 	
 }
